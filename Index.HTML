@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>易歐特科技有限公司</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy: #1a2d4e;
+    --navy-mid: #243d66;
+    --navy-light: #2e4f82;
+    --steel: #4a6080;
+    --silver: #8fa3bc;
+    --ice: #e8eef5;
+    --white: #f5f8fc;
+    --accent: #3a82c4;
+    --accent-light: #5a9fd4;
+    --text-dark: #1a2332;
+    --text-mid: #3a4a5c;
+    --text-muted: #7a8fa8;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Noto Sans TC', sans-serif;
+    background: var(--white);
+    color: var(--text-dark);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(26, 45, 78, 0.97);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    padding: 0 5%;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 64px;
+  }
+  .nav-logo { display: flex; align-items: center; gap: 10px; }
+  .logo-mark {
+    width: 36px; height: 36px;
+    background: var(--accent);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 600; font-size: 15px; color: white; letter-spacing: 0.5px;
+    font-family: 'Noto Serif TC', serif;
+  }
+  .logo-text { color: white; font-size: 13px; font-weight: 400; line-height: 1.3; letter-spacing: 0.02em; }
+  .logo-text strong { display: block; font-size: 12px; color: var(--silver); font-weight: 300; }
+  .nav-links { display: flex; gap: 32px; }
+  .nav-links a {
+    color: rgba(255,255,255,0.75); font-size: 13px; letter-spacing: 0.06em;
+    text-decoration: none; font-weight: 400;
+    transition: color 0.2s;
+    padding-bottom: 2px;
+    border-bottom: 1px solid transparent;
+  }
+  .nav-links a:hover { color: white; border-color: var(--accent-light); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    background: linear-gradient(160deg, var(--navy) 0%, var(--navy-mid) 45%, #1e3a5e 100%);
+    display: flex; align-items: center;
+    padding: 100px 5% 80px;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background-image:
+      radial-gradient(circle at 20% 50%, rgba(58,130,196,0.12) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(58,130,196,0.08) 0%, transparent 40%);
+    pointer-events: none;
+  }
+  .hero-grid {
+    position: absolute; inset: 0; pointer-events: none;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+  .hero-inner { max-width: 700px; position: relative; z-index: 1; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(58,130,196,0.2);
+    border: 1px solid rgba(58,130,196,0.35);
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 12px; letter-spacing: 0.1em;
+    color: var(--accent-light);
+    margin-bottom: 28px;
+  }
+  .hero-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent-light); display: inline-block; }
+  .hero h1 {
+    font-family: 'Noto Serif TC', serif;
+    font-size: clamp(28px, 5vw, 52px);
+    font-weight: 600; color: white;
+    line-height: 1.3; letter-spacing: 0.02em; margin-bottom: 12px;
+  }
+  .hero h1 em { font-style: normal; color: var(--accent-light); }
+  .hero-en { font-size: 13px; color: var(--silver); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 28px; font-weight: 300; }
+  .hero-desc { font-size: 16px; color: rgba(255,255,255,0.7); line-height: 1.8; max-width: 500px; margin-bottom: 44px; }
+  .hero-divider { width: 40px; height: 2px; background: var(--accent); margin-bottom: 28px; }
+  .hero-tags { display: flex; gap: 10px; flex-wrap: wrap; }
+  .tag { border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; padding: 6px 14px; font-size: 12px; color: rgba(255,255,255,0.65); letter-spacing: 0.05em; }
+  .hero-scroll {
+    position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    color: rgba(255,255,255,0.35); font-size: 11px; letter-spacing: 0.15em;
+  }
+  .scroll-line { width: 1px; height: 36px; background: rgba(255,255,255,0.2); animation: scrollPulse 2s ease-in-out infinite; }
+  @keyframes scrollPulse { 0%, 100% { opacity: 0.2; } 50% { opacity: 0.6; } }
+
+  /* SECTIONS */
+  section { padding: 90px 5%; }
+  .section-label {
+    font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--accent); font-weight: 500; margin-bottom: 14px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-label::after { content: ''; flex: 1; max-width: 40px; height: 1px; background: var(--accent); display: inline-block; }
+  .section-title { font-family: 'Noto Serif TC', serif; font-size: clamp(22px, 3vw, 34px); font-weight: 600; color: var(--navy); line-height: 1.4; margin-bottom: 16px; }
+  .section-sub { font-size: 15px; color: var(--text-muted); max-width: 480px; line-height: 1.8; }
+
+  /* ABOUT */
+  .about { background: white; }
+  .about-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; margin-top: 56px; }
+  .about-text p { color: var(--text-mid); line-height: 1.9; margin-bottom: 16px; font-size: 15px; }
+  .about-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--ice); border: 1px solid var(--ice); border-radius: 12px; overflow: hidden; }
+  .stat-cell { background: white; padding: 28px 24px; text-align: center; }
+  .stat-num { font-family: 'Noto Serif TC', serif; font-size: 36px; font-weight: 600; color: var(--navy); line-height: 1; margin-bottom: 6px; }
+  .stat-num span { font-size: 18px; color: var(--accent); }
+  .stat-label { font-size: 12px; color: var(--text-muted); letter-spacing: 0.05em; }
+
+  /* SERVICES */
+  .services { background: var(--white); }
+  .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; margin-top: 56px; }
+  .service-card {
+    background: white; border: 1px solid rgba(26,45,78,0.08);
+    border-radius: 12px; padding: 36px 28px;
+    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .service-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform 0.3s; }
+  .service-card:hover { transform: translateY(-4px); border-color: rgba(58,130,196,0.2); box-shadow: 0 12px 40px rgba(26,45,78,0.08); }
+  .service-card:hover::before { transform: scaleX(1); }
+  .service-icon { width: 48px; height: 48px; border-radius: 10px; background: var(--ice); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
+  .service-icon svg { width: 22px; height: 22px; stroke: var(--navy-light); fill: none; stroke-width: 1.5; }
+  .service-card h3 { font-size: 16px; font-weight: 500; color: var(--navy); margin-bottom: 10px; }
+  .service-card p { font-size: 13px; color: var(--text-muted); line-height: 1.75; }
+
+  /* CONTACT */
+  .contact { background: var(--navy); }
+  .contact .section-label { color: var(--accent-light); }
+  .contact .section-label::after { background: var(--accent-light); }
+  .contact .section-title { color: white; }
+  .contact .section-sub { color: rgba(255,255,255,0.5); }
+  .contact-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; margin-top: 56px; align-items: start; }
+  .contact-info { display: flex; flex-direction: column; gap: 20px; }
+  .contact-item { display: flex; align-items: flex-start; gap: 14px; padding: 20px; border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; background: rgba(255,255,255,0.04); }
+  .contact-icon { width: 38px; height: 38px; min-width: 38px; border-radius: 8px; background: rgba(58,130,196,0.2); display: flex; align-items: center; justify-content: center; }
+  .contact-icon svg { width: 16px; height: 16px; stroke: var(--accent-light); fill: none; stroke-width: 1.5; }
+  .contact-item-label { font-size: 11px; color: var(--silver); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+  .contact-item-value { font-size: 14px; color: white; }
+  .contact-item-value a { color: var(--accent-light); text-decoration: none; }
+  .contact-form { display: flex; flex-direction: column; gap: 14px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .form-field { display: flex; flex-direction: column; gap: 6px; }
+  .form-field label { font-size: 11px; color: rgba(255,255,255,0.5); letter-spacing: 0.08em; text-transform: uppercase; }
+  .form-field input, .form-field textarea { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; padding: 10px 14px; color: white; font-size: 14px; font-family: 'Noto Sans TC', sans-serif; outline: none; transition: border-color 0.2s; }
+  .form-field input:focus, .form-field textarea:focus { border-color: rgba(58,130,196,0.6); }
+  .form-field textarea { resize: vertical; min-height: 100px; }
+  .btn-submit { background: var(--accent); border: none; border-radius: 8px; padding: 12px 28px; color: white; font-size: 14px; font-family: 'Noto Sans TC', sans-serif; cursor: pointer; transition: background 0.2s; align-self: flex-start; letter-spacing: 0.05em; }
+  .btn-submit:hover { background: var(--accent-light); }
+
+  /* FOOTER */
+  footer { background: #111d2e; padding: 28px 5%; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+  footer p { font-size: 12px; color: rgba(255,255,255,0.3); letter-spacing: 0.04em; }
+
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .about-layout, .contact-layout { grid-template-columns: 1fr; gap: 40px; }
+    .form-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">
+    <div class="logo-mark">易歐</div>
+    <div class="logo-text">
+      易歐特科技有限公司
+      <strong>E&M Auto Technology</strong>
+    </div>
+  </div>
+  <div class="nav-links">
+    <a href="#about">關於我們</a>
+    <a href="#services">服務項目</a>
+    <a href="#contact">聯絡我們</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-badge">專業自動化解決方案</div>
+    <h1>易歐特科技<br><em>精密工程</em>，驅動未來</h1>
+    <p class="hero-en">E&M Auto Technology Ltd., Co.</p>
+    <div class="hero-divider"></div>
+    <p class="hero-desc">整合自動化設備規劃設計與廢水處理工程，為客戶提供全方位的工業技術解決方案，從設計到實施，精準可靠。</p>
+    <div class="hero-tags">
+      <div class="tag">自動化設備規劃</div>
+      <div class="tag">廢水處理工程</div>
+      <div class="tag">客製化設計</div>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    SCROLL
+  </div>
+</section>
+
+<section class="about" id="about">
+  <div class="section-label">關於我們</div>
+  <h2 class="section-title">技術創新，品質為本</h2>
+  <p class="section-sub">易歐特科技致力於提供高品質的工業自動化及環境工程服務，以專業技術與豐富經驗陪伴客戶成長。</p>
+  <div class="about-layout">
+    <div class="about-text">
+      <p>易歐特科技有限公司（E&M Auto Technology Ltd.）專注於自動化設備的規劃與設計，以及廢水處理工程領域，提供完整的工業解決方案。</p>
+      <p>我們的團隊由資深工程師組成，結合多年實務經驗與前沿技術，從需求分析、系統設計到設備安裝與後續維護，全程提供客戶最可靠的支援。</p>
+      <p>無論是生產線自動化升級，或是工廠廢水處理系統的建置，我們都能提供符合法規且高效能的客製化方案。</p>
+    </div>
+    <div class="about-stats">
+      <div class="stat-cell">
+        <div class="stat-num">10<span>+</span></div>
+        <div class="stat-label">年以上專業經驗</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num">100<span>+</span></div>
+        <div class="stat-label">完成工程案例</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num">2</div>
+        <div class="stat-label">核心業務領域</div>
+      </div>
+      <div class="stat-cell">
+        <div class="stat-num">24<span>h</span></div>
+        <div class="stat-label">技術支援服務</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="services" id="services">
+  <div class="section-label">服務項目</div>
+  <h2 class="section-title">我們提供什麼</h2>
+  <p class="section-sub">兩大核心專業領域，提供從規劃到執行的一站式工程服務。</p>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
+      </div>
+      <h3>自動化設備規劃</h3>
+      <p>針對生產流程需求，進行自動化系統的完整規劃，提升生產效率，降低人力成本，確保產品品質穩定。</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      </div>
+      <h3>自動化設備設計</h3>
+      <p>依據客戶需求進行客製化機械與電氣設計，整合感測器、PLC控制與人機介面，打造符合需求的專屬自動化設備。</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <h3>廢水處理工程</h3>
+      <p>規劃並建置符合環保法規的工業廢水處理系統，從初步評估、系統設計到施工完工，全程負責，確保排放合規。</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07M8.46 8.46a5 5 0 0 0 0 7.07"/></svg>
+      </div>
+      <h3>維護與技術支援</h3>
+      <p>提供設備安裝後的定期維護、故障診斷與緊急技術支援服務，確保系統長期穩定運作，延長設備使用壽命。</p>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="section-label">聯絡我們</div>
+  <h2 class="section-title">與我們討論您的需求</h2>
+  <p class="section-sub">無論是詢問報價或技術諮詢，歡迎隨時與我們聯繫，專業團隊將盡快回覆您。</p>
+  <div class="contact-layout">
+    <div class="contact-info">
+      <div class="contact-item">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </div>
+        <div>
+          <div class="contact-item-label">電子郵件</div>
+          <div class="contact-item-value"><a href="mailto:ivan@em-auto.com.tw">ivan@em-auto.com.tw</a></div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <div>
+          <div class="contact-item-label">服務地區</div>
+          <div class="contact-item-value">台灣全區</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div>
+          <div class="contact-item-label">服務時間</div>
+          <div class="contact-item-value">週一至週五 09:00 – 18:00</div>
+        </div>
+      </div>
+    </div>
+    <div class="contact-form">
+      <div class="form-row">
+        <div class="form-field">
+          <label>姓名</label>
+          <input type="text" placeholder="您的姓名">
+        </div>
+        <div class="form-field">
+          <label>電話</label>
+          <input type="tel" placeholder="聯絡電話">
+        </div>
+      </div>
+      <div class="form-field">
+        <label>電子郵件</label>
+        <input type="email" placeholder="your@email.com">
+      </div>
+      <div class="form-field">
+        <label>訊息內容</label>
+        <textarea placeholder="請描述您的需求或問題…"></textarea>
+      </div>
+      <button class="btn-submit" onclick="alert('感謝您的來信！我們將盡快與您聯繫。')">送出訊息</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2025 易歐特科技有限公司 E&M Auto Technology Ltd., Co.</p>
+  <p>ivan@em-auto.com.tw</p>
+</footer>
+
+</body>
+</html>
