@@ -22,20 +22,14 @@
     border-bottom: 1px solid rgba(255,255,255,0.08);
     padding: 0 5%; display: flex; align-items: center; justify-content: space-between; height: 64px;
   }
-  .nav-logo { display: flex; align-items: center; gap: 10px; }
-  .logo-mark { width: 36px; height: 36px; background: var(--accent); border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 15px; color: white; font-family: 'Noto Serif TC', serif; }
+  .nav-logo { display: flex; align-items: center; gap: 12px; }
   .logo-text { color: white; font-size: 13px; font-weight: 400; line-height: 1.3; }
-  .logo-text strong { display: block; font-size: 12px; color: var(--silver); font-weight: 300; }
+  .logo-text strong { display: block; font-size: 11px; color: var(--silver); font-weight: 300; margin-top: 2px; }
   .nav-links { display: flex; gap: 28px; }
   .nav-links a { color: rgba(255,255,255,0.75); font-size: 13px; letter-spacing: 0.06em; text-decoration: none; transition: color 0.2s; padding-bottom: 2px; border-bottom: 1px solid transparent; }
   .nav-links a:hover { color: white; border-color: var(--accent-light); }
 
-  .hero {
-    min-height: 100vh;
-    background: linear-gradient(160deg, var(--navy) 0%, var(--navy-mid) 45%, #1e3a5e 100%);
-    display: flex; align-items: center; padding: 100px 5% 80px;
-    position: relative; overflow: hidden;
-  }
+  .hero { min-height: 100vh; background: linear-gradient(160deg, var(--navy) 0%, var(--navy-mid) 45%, #1e3a5e 100%); display: flex; align-items: center; padding: 100px 5% 80px; position: relative; overflow: hidden; }
   .hero::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle at 20% 50%, rgba(58,130,196,0.12) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(58,130,196,0.08) 0%, transparent 40%); pointer-events: none; }
   .hero-grid { position: absolute; inset: 0; pointer-events: none; background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px); background-size: 60px 60px; }
   .hero-inner { max-width: 700px; position: relative; z-index: 1; }
@@ -137,8 +131,17 @@
 
 <nav>
   <div class="nav-logo">
-    <div class="logo-mark">易歐</div>
-    <div class="logo-text">易歐特科技有限公司<strong>E&M Auto Technology</strong></div>
+    <svg width="56" height="56" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="28" cy="28" r="25" fill="none" stroke="#3a7bc8" stroke-width="1.6"/>
+      <circle cx="28" cy="28" r="17" fill="#1e3a62"/>
+      <circle cx="28" cy="28" r="17" fill="none" stroke="#2a5a9a" stroke-width="1"/>
+      <text x="28" y="32" text-anchor="middle" fill="#7aafd4" font-size="9.5" font-family="Arial, sans-serif" font-weight="400" letter-spacing="1">ema</text>
+      <circle cx="46" cy="9" r="5" fill="#00d4ff"/>
+    </svg>
+    <div class="logo-text">
+      易歐特科技有限公司
+      <strong>E&M Auto Technology</strong>
+    </div>
   </div>
   <div class="nav-links">
     <a href="#about">關於我們</a>
@@ -237,7 +240,6 @@
         <span class="project-result">出水水質符合放流水標準，系統穩定運行</span>
       </div>
     </div>
-
     <div class="project-card">
       <div class="project-header">
         <div class="project-tag">科技廠廢水處理</div>
