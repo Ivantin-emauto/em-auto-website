@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>漁業養殖監控 — 易歐特科技有限公司</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --font-sans:'Noto Sans TC',sans-serif;
+  --color-text-primary:#1a2332;--color-text-secondary:#3a4a5c;--color-text-tertiary:#7a8fa8;
+  --color-background-primary:#fff;--color-background-secondary:#f5f8fc;
+  --color-border-tertiary:rgba(26,45,78,0.08);--color-border-secondary:rgba(26,45,78,0.15);
+  --color-background-success:#EAF3DE;--color-text-success:#3B6D11;
+  --color-background-warning:#FAEEDA;--color-text-warning:#854F0B;
+  --color-background-danger:#FCEBEB;--color-text-danger:#A32D2D;
+  --color-background-info:#E6F1FB;--color-text-info:#185FA5;
+  --border-radius-md:8px;--border-radius-lg:12px;
+}
+body{font-family:var(--font-sans);background:var(--color-background-secondary);color:var(--color-text-primary);font-size:14px;line-height:1.6}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(26,45,78,0.97);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,0.08);padding:0 5%;display:flex;align-items:center;justify-content:space-between;height:56px}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.nav-logo span{color:white;font-size:13px}
+.nav-logo strong{color:rgba(255,255,255,0.5);font-size:11px;font-weight:300;margin-left:6px}
+.nav-back{color:rgba(255,255,255,0.65);font-size:12px;text-decoration:none;display:flex;align-items:center;gap:5px;transition:color .2s}
+.nav-back:hover{color:white}
+.badge-live{font-size:11px;padding:3px 10px;border-radius:99px;background:rgba(29,158,117,.2);color:#1D9E75;border:.5px solid #1D9E75;display:flex;align-items:center;gap:5px}
+.bdot{width:6px;height:6px;border-radius:50%;background:#1D9E75;animation:blink 1.4s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.wrap{padding:72px 5% 2rem;max-width:1100px;margin:0 auto}
+footer{margin-top:2rem;padding:1rem 5%;text-align:center;font-size:12px;color:var(--color-text-tertiary);border-top:.5px solid var(--color-border-tertiary)}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-logo">
+    <svg width="32" height="32" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="28" cy="28" r="25" fill="none" stroke="#3a7bc8" stroke-width="1.6"/>
+      <circle cx="28" cy="28" r="17" fill="#1e3a62"/>
+      <text x="28" y="32" text-anchor="middle" fill="#7aafd4" font-size="9.5" font-family="Arial" font-weight="400" letter-spacing="1">ema</text>
+      <circle cx="46" cy="9" r="5" fill="#00d4ff"/>
+    </svg>
+    <span>易歐特科技有限公司<strong>漁業養殖雲端監控</strong></span>
+  </div>
+  <div style="display:flex;align-items:center;gap:14px">
+    <div class="badge-live"><span class="bdot"></span>即時監控</div>
+    <a href="index.html" class="nav-back"><i class="ti ti-arrow-left" style="font-size:14px"></i>回官網</a>
+  </div>
+</nav>
+<div class="wrap">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem}
+.sec{font-size:11px;font-weight:500;color:var(--color-text-tertiary);letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px}
+.badge{display:inline-flex;align-items:center;gap:3px;font-size:11px;padding:2px 8px;border-radius:999px;font-weight:500}
+.b-ok{background:var(--color-background-success);color:var(--color-text-success)}
+.b-warn{background:var(--color-background-warning);color:var(--color-text-warning)}
+.b-danger{background:var(--color-background-danger);color:var(--color-text-danger)}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.mc{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.75rem 1rem}
+.mv{font-size:20px;font-weight:500;color:var(--color-text-primary)}
+.ml{font-size:11px;color:var(--color-text-secondary);margin-bottom:2px}
+.mu{font-size:12px;font-weight:400;color:var(--color-text-secondary)}
+.pbar{height:5px;border-radius:3px;background:var(--color-background-secondary);margin-top:5px;overflow:hidden}
+.pfill{height:100%;border-radius:3px;transition:width .4s}
+.row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.row:last-child{border-bottom:none}
+.tog{position:relative;display:inline-block;width:38px;height:20px;flex-shrink:0}
+.tog input{opacity:0;width:0;height:0}
+.sl{position:absolute;inset:0;background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-radius:20px;cursor:pointer;transition:.2s}
+.sl:before{content:"";position:absolute;width:14px;height:14px;left:2px;top:2px;background:var(--color-text-tertiary);border-radius:50%;transition:.2s}
+input:checked+.sl{background:#1D9E75;border-color:#1D9E75}
+input:checked+.sl:before{transform:translateX(18px);background:#fff}
+.inp{width:100%;font-size:13px;padding:7px 10px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary)}
+.sel{font-size:13px;padding:6px 10px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary)}
+.btn{padding:6px 14px;font-size:12px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-primary);cursor:pointer;display:inline-flex;align-items:center;gap:5px}
+.btn-g{padding:7px 16px;font-size:13px;border-radius:var(--border-radius-md);border:none;background:#1D9E75;color:#fff;cursor:pointer;font-weight:500;display:inline-flex;align-items:center;gap:5px}
+.nav-item{display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:var(--border-radius-md);font-size:13px;cursor:pointer;color:var(--color-text-secondary);transition:background .15s}
+.nav-item:hover{background:var(--color-background-secondary)}
+.nav-item.active{background:var(--color-background-success);color:#085041;font-weight:500}
+.page{display:none}
+.page.on{display:block}
+.lrow{display:flex;align-items:flex-start;gap:8px;padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px}
+.lrow:last-child{border-bottom:none}
+.ldot{width:7px;height:7px;border-radius:50%;margin-top:3px;flex-shrink:0}
+.cal-cell{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:6px 2px;font-size:11px;text-align:center}
+.cal-cell.due{background:#FAEEDA;border-color:#BA7517;color:#633806}
+.cal-cell.done{background:#E1F5EE;border-color:#1D9E75;color:#085041}
+.cal-cell.today{border:2px solid #185FA5;color:#0C447C}
+</style>
+
+<div style="padding:1rem 0">
+<h2 class="sr-only">易歐特科技有限公司 AquaCloud 漁業養殖雲端監控全系統</h2>
+
+<div style="border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between">
+  <div style="display:flex;align-items:center;gap:12px">
+    <div style="width:40px;height:40px;border-radius:var(--border-radius-md);background:#E1F5EE;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+      <i class="ti ti-fish" style="font-size:22px;color:#0F6E56" aria-hidden="true"></i>
+    </div>
+    <div>
+      <div style="font-size:15px;font-weight:500;color:var(--color-text-primary)">AquaCloud 養殖雲端監控系統</div>
+      <div style="font-size:11px;color:var(--color-text-secondary);margin-top:1px">
+        <span style="color:var(--color-text-tertiary)">技術提供</span>
+        <span style="font-weight:500;color:var(--color-text-secondary);margin:0 4px">易歐特科技有限公司</span>
+        <span style="color:var(--color-text-tertiary)">· E&amp;M Auto Technology Co., Ltd.</span>
+      </div>
+    </div>
+  </div>
+  <div style="text-align:right">
+    <div style="font-size:11px;color:var(--color-text-secondary)" id="main-clock">載入中...</div>
+    <div style="font-size:11px;color:var(--color-text-tertiary);margin-top:2px">台南市七股區</div>
+    <div style="display:flex;gap:5px;margin-top:5px;justify-content:flex-end">
+      <span class="badge b-ok"><i class="ti ti-wifi" style="font-size:10px"></i> 系統正常</span>
+      <span class="badge b-danger"><i class="ti ti-bell" style="font-size:10px"></i> 2 警示</span>
+    </div>
+  </div>
+</div>
+
+<div style="display:flex;gap:0;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden">
+  <div style="width:140px;flex-shrink:0;border-right:0.5px solid var(--color-border-tertiary);padding:8px;display:flex;flex-direction:column">
+    <div class="nav-item active" id="nav-0" onclick="goPage(0)"><i class="ti ti-layout-dashboard" aria-hidden="true"></i> 總覽</div>
+    <div class="nav-item" id="nav-1" onclick="goPage(1)"><i class="ti ti-droplet" aria-hidden="true"></i> 水質感測</div>
+    <div class="nav-item" id="nav-2" onclick="goPage(2)"><i class="ti ti-settings-automation" aria-hidden="true"></i> 自動換水</div>
+    <div class="nav-item" id="nav-3" onclick="goPage(3)"><i class="ti ti-calendar-check" aria-hidden="true"></i> 校正排程</div>
+    <div class="nav-item" id="nav-4" onclick="goPage(4)"><i class="ti ti-bell" aria-hidden="true"></i> 推播通知</div>
+    <div style="flex:1"></div>
+    <div style="padding:8px 0;border-top:0.5px solid var(--color-border-tertiary);margin-top:8px">
+      <div class="nav-item" onclick="sendPrompt('幫我生成本週漁場完整水質分析報告')"><i class="ti ti-report-analytics" aria-hidden="true"></i> AI 報告 ↗</div>
+      <div style="padding:8px 12px 2px">
+        <div style="font-size:10px;color:var(--color-text-tertiary)">易歐特科技</div>
+        <div style="font-size:10px;color:var(--color-text-tertiary)">v2.4.1</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="flex:1;padding:1rem;min-height:520px">
+
+    <div class="page on" id="page-0">
+      <div class="sec">即時總覽</div>
+      <div class="g4" style="margin-bottom:14px">
+        <div class="mc"><div class="ml"><i class="ti ti-pool" aria-hidden="true" style="font-size:12px"></i> 活躍魚池</div><div class="mv">6 <span class="mu">池</span></div><div style="font-size:11px;color:var(--color-text-success);margin-top:2px">全數連線</div></div>
+        <div class="mc"><div class="ml"><i class="ti ti-alert-triangle" aria-hidden="true" style="font-size:12px"></i> 今日警示</div><div class="mv" style="color:var(--color-text-danger)">2 <span class="mu">件</span></div><div style="font-size:11px;color:var(--color-text-warning);margin-top:2px">待處理</div></div>
+        <div class="mc"><div class="ml"><i class="ti ti-calendar-check" aria-hidden="true" style="font-size:12px"></i> 待校正感測</div><div class="mv" style="color:var(--color-text-warning)">3 <span class="mu">項</span></div><div style="font-size:11px;color:var(--color-text-secondary);margin-top:2px">本週到期</div></div>
+        <div class="mc"><div class="ml"><i class="ti ti-droplet-half" aria-hidden="true" style="font-size:12px"></i> 今日換水</div><div class="mv">4 <span class="mu">次</span></div><div style="font-size:11px;color:var(--color-text-success);margin-top:2px">自動執行</div></div>
+      </div>
+      <div class="g2" style="margin-bottom:14px">
+        <div class="card">
+          <div class="sec">各池狀態</div>
+          <div id="pond-status-list"></div>
+        </div>
+        <div class="card">
+          <div class="sec">今日事件紀錄</div>
+          <div class="lrow"><div class="ldot" style="background:#E24B4A"></div><div><span style="color:var(--color-text-primary);font-weight:500">A2池 氨氮超標 0.82 mg/L</span><br><span style="color:var(--color-text-secondary)">09:14 · 自動換水已觸發</span></div></div>
+          <div class="lrow"><div class="ldot" style="background:#BA7517"></div><div><span style="color:var(--color-text-primary);font-weight:500">B2池 水溫偏高 31.4°C</span><br><span style="color:var(--color-text-secondary)">08:52 · 連續偏高 2 小時</span></div></div>
+          <div class="lrow"><div class="ldot" style="background:#1D9E75"></div><div><span style="color:var(--color-text-primary);font-weight:500">A1池 自動換水完成 20%</span><br><span style="color:var(--color-text-secondary)">06:42 · NH₃ 0.95→0.62</span></div></div>
+          <div class="lrow"><div class="ldot" style="background:#185FA5"></div><div><span style="color:var(--color-text-primary);font-weight:500">pH 感測器校正提醒</span><br><span style="color:var(--color-text-secondary)">LINE 已推播 · 05:00</span></div></div>
+          <div class="lrow"><div class="ldot" style="background:#1D9E75"></div><div><span style="color:var(--color-text-primary);font-weight:500">每日水質日報已發送</span><br><span style="color:var(--color-text-secondary)">Email + LINE · 07:00</span></div></div>
+          <div style="margin-top:10px"><button class="btn" onclick="sendPrompt('分析今日漁場異常事件並提供改善建議')">AI 分析今日事件 ↗</button></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="sec">24 小時溶氧趨勢（全池均值）</div>
+        <div style="display:flex;gap:12px;font-size:11px;color:var(--color-text-secondary);margin-bottom:8px">
+          <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#1D9E75;margin-right:3px"></span>溶氧 mg/L</span>
+          <span><span style="display:inline-block;width:16px;height:2px;background:#E24B4A;margin-right:3px;vertical-align:middle"></span>警戒線 5.0</span>
+        </div>
+        <div style="position:relative;width:100%;height:140px">
+          <canvas id="overviewChart" role="img" aria-label="全池24小時溶氧趨勢折線圖">全池24小時平均溶氧趨勢。</canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="page" id="page-1">
+      <div class="sec">9 種感測器即時監控</div>
+      <div class="g3" style="margin-bottom:14px">
+        <div class="mc"><div class="ml"><i class="ti ti-droplet" aria-hidden="true" style="font-size:12px"></i> 溶氧 DO</div><div class="mv">7.1 <span class="mu">mg/L</span></div><div class="pbar"><div class="pfill" style="width:71%;background:#1D9E75"></div></div><div style="font-size:11px;color:var(--color-text-success);margin-top:3px">正常 5–9</div></div>
+        <div class="mc"><div class="ml"><i class="ti ti-thermometer" aria-hidden="true" style="font-size:12px"></i> 水溫</div><div class="mv" style="color:var(--color-text-warning)">31.4 <span class="mu">°C</span></div><div class="pbar"><div class="pfill" style="width:82%;background:#BA7517"></div></div><div style="font-size:11px;color:var(--color-text-warning);margin-top:3px">偏高 22–30</div></div>
+        <div class="mc"><div class="ml"><i class="ti ti-flask" aria-hidden="true" style="font-size:12px"></i> pH</div><div class="mv">7.8 <span class="mu">pH</span></div><div class="pbar"><div class="pfill" style="width:78%;background:#185FA5"></div></div><div style="font-size:11px;color:var(--color-text-success);margin-top:3px">正常 6.5–8.5</div></div>
+        <div class="mc"><div class="ml"><i class="ti ti-atom" aria-hidden="true" style="font-size:12px"></i> 氨氮 NH₃</div><div class="mv" style="color:var(--color-text-danger)">0.82 <span class="mu">mg/L</span></div><div class="pbar"><div class="pfill" style="width:82%;background:#E24B4A"></div></div><div style="font-size:11px;color:var(--color-text-danger);margin-top:3px">超標 &lt;0.5</div></div>
+        <div class="mc"><div class="ml"><i class="ti ti-wave-sine" aria-hidden="true" style="font-size:12px"></i> 鹽度</div><div class="mv">18.3 <span class="mu">‰</span></div><div class="pbar"><div class="pfill" style="width:61%;background:#7F77DD"></div></div><div style="font-size:11px;color:var(--color-text-success);margin-top:3px">正常 10–25</div></div>
+        <div class="mc"><div class="ml"><i class="ti ti-eye" aria-hidden="true" style="font-size:12px"></i> 濁度</div><div class="mv">24 <span class="mu">NTU</span></div><div class="pbar"><div class="pfill" style="width:48%;background:#185FA5"></div></div><div style="font-size:11px;color:var(--color-text-success);margin-top:3px">正常 &lt;50</div></div>
+        <div class="mc"><div class="ml"><i class="ti ti-leaf" aria-hidden="true" style="font-size:12px"></i> 亞硝酸鹽 NO₂</div><div class="mv">0.12 <span class="mu">mg/L</span></div><div class="pbar"><div class="pfill" style="width:24%;background:#1D9E75"></div></div><div style="font-size:11px;color:var(--color-text-success);margin-top:3px">正常 &lt;0.3</div></div>
+        <div class="mc"><div class="ml"><i class="ti ti-bolt" aria-hidden="true" style="font-size:12px"></i> 導電度</div><div class="mv">28.4 <span class="mu">mS/cm</span></div><div class="pbar"><div class="pfill" style="width:57%;background:#185FA5"></div></div><div style="font-size:11px;color:var(--color-text-success);margin-top:3px">正常 20–40</div></div>
+        <div class="mc"><div class="ml"><i class="ti ti-sun" aria-hidden="true" style="font-size:12px"></i> 葉綠素</div><div class="mv">12 <span class="mu">μg/L</span></div><div class="pbar"><div class="pfill" style="width:40%;background:#639922"></div></div><div style="font-size:11px;color:var(--color-text-success);margin-top:3px">正常 5–30</div></div>
+      </div>
+      <div class="card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+          <div class="sec" style="margin:0">感測器趨勢</div>
+          <select class="sel" id="sensor-sel" onchange="updateSensorChart()">
+            <option value="do">溶氧 DO</option><option value="nh3">氨氮 NH₃</option>
+            <option value="temp">水溫</option><option value="sal">鹽度</option><option value="ph">pH</option>
+          </select>
+        </div>
+        <div style="position:relative;width:100%;height:160px">
+          <canvas id="sensorChart" role="img" aria-label="感測器24小時趨勢折線圖">感測器趨勢資料。</canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="page" id="page-2">
+      <div class="sec">自動換水控制聯動</div>
+      <div class="g2" style="margin-bottom:12px">
+        <div><div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:5px">目標魚池</div><select class="sel" style="width:100%"><option>A2 池 — 白蝦（氨氮超標）</option><option>B2 池 — 吳郭魚（水溫偏高）</option><option>A1 池 — 虱目魚</option></select></div>
+        <div><div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:5px">換水模式</div><select class="sel" style="width:100%"><option>自動觸發（依感測器）</option><option>定時換水</option><option>手動執行</option></select></div>
+      </div>
+      <div class="card" style="margin-bottom:12px">
+        <div class="sec">觸發條件</div>
+        <div class="row"><label class="tog"><input type="checkbox" checked><span class="sl"></span></label><div style="flex:1"><div style="font-size:13px;font-weight:500;color:var(--color-text-primary)">氨氮超標換水</div><div style="font-size:11px;color:var(--color-text-secondary)">NH₃ &gt; <span id="v-nh3">0.5</span> mg/L</div></div><input type="range" min="1" max="10" value="5" step="1" style="width:80px" oninput="document.getElementById('v-nh3').textContent=(this.value/10).toFixed(1)"></div>
+        <div class="row"><label class="tog"><input type="checkbox" checked><span class="sl"></span></label><div style="flex:1"><div style="font-size:13px;font-weight:500;color:var(--color-text-primary)">溶氧不足補水</div><div style="font-size:11px;color:var(--color-text-secondary)">DO &lt; <span id="v-do">5.0</span> mg/L</div></div><input type="range" min="30" max="70" value="50" step="1" style="width:80px" oninput="document.getElementById('v-do').textContent=(this.value/10).toFixed(1)"></div>
+        <div class="row"><label class="tog"><input type="checkbox"><span class="sl"></span></label><div style="flex:1"><div style="font-size:13px;font-weight:500;color:var(--color-text-primary)">水溫過高降溫換水</div><div style="font-size:11px;color:var(--color-text-secondary)">水溫 &gt; <span id="v-temp">31</span>°C</div></div><input type="range" min="28" max="36" value="31" step="1" style="width:80px" oninput="document.getElementById('v-temp').textContent=this.value"></div>
+        <div class="row"><label class="tog"><input type="checkbox" checked><span class="sl"></span></label><div style="flex:1"><div style="font-size:13px;font-weight:500;color:var(--color-text-primary)">單次換水量上限</div><div style="font-size:11px;color:var(--color-text-secondary)">不超過池容量 <span id="v-lim">25</span>%</div></div><input type="range" min="10" max="50" value="25" step="5" style="width:80px" oninput="document.getElementById('v-lim').textContent=this.value"></div>
+      </div>
+      <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px;margin-bottom:12px">
+        <div style="font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:8px">A2池 目前狀態</div>
+        <div class="g3">
+          <div><div style="font-size:11px;color:var(--color-text-secondary)">氨氮</div><div style="font-size:16px;font-weight:500;color:var(--color-text-danger)">0.82 mg/L</div><div class="pbar"><div class="pfill" style="width:82%;background:#E24B4A"></div></div></div>
+          <div><div style="font-size:11px;color:var(--color-text-secondary)">溶氧</div><div style="font-size:16px;font-weight:500;color:var(--color-text-warning)">4.8 mg/L</div><div class="pbar"><div class="pfill" style="width:48%;background:#BA7517"></div></div></div>
+          <div><div style="font-size:11px;color:var(--color-text-secondary)">建議換水量</div><div style="font-size:16px;font-weight:500">25%</div><div class="pbar"><div class="pfill" style="width:25%;background:#185FA5"></div></div></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:10px">
+          <button class="btn-g" onclick="toast('A2池換水指令已發送，進水閥開啟 25%')"><i class="ti ti-player-play" style="font-size:13px"></i> 立即執行換水</button>
+          <button class="btn" onclick="sendPrompt('A2池白蝦氨氮0.82溶氧4.8，換水25%是否足夠？')">問 AI ↗</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="sec">換水記錄</div>
+        <div class="lrow"><div class="ldot" style="background:#1D9E75"></div><div><span style="color:var(--color-text-primary);font-weight:500">A2池 自動換水 20%</span> <span style="color:var(--color-text-secondary)">· 今日 06:42 · NH₃ 0.95→0.71</span></div></div>
+        <div class="lrow"><div class="ldot" style="background:#1D9E75"></div><div><span style="color:var(--color-text-primary);font-weight:500">B2池 自動換水 15%</span> <span style="color:var(--color-text-secondary)">· 昨日 14:20 · 水溫 32.1→29.8°C</span></div></div>
+        <div class="lrow"><div class="ldot" style="background:#BA7517"></div><div><span style="color:var(--color-text-primary);font-weight:500">A1池 水泵異常中斷</span> <span style="color:var(--color-text-secondary)">· 5/8 · 已通報維修</span></div></div>
+      </div>
+    </div>
+
+    <div class="page" id="page-3">
+      <div class="sec">感測器校正排程</div>
+      <div class="g2" style="margin-bottom:14px">
+        <div class="card">
+          <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:8px">五月 2026</div>
+          <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:5px">
+            <div style="font-size:10px;color:var(--color-text-tertiary);text-align:center">日</div><div style="font-size:10px;color:var(--color-text-tertiary);text-align:center">一</div><div style="font-size:10px;color:var(--color-text-tertiary);text-align:center">二</div><div style="font-size:10px;color:var(--color-text-tertiary);text-align:center">三</div><div style="font-size:10px;color:var(--color-text-tertiary);text-align:center">四</div><div style="font-size:10px;color:var(--color-text-tertiary);text-align:center">五</div><div style="font-size:10px;color:var(--color-text-tertiary);text-align:center">六</div>
+          </div>
+          <div id="cal" style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px"></div>
+          <div style="display:flex;gap:8px;margin-top:8px;font-size:11px;color:var(--color-text-secondary)">
+            <span><span style="width:8px;height:8px;border-radius:2px;background:#FAEEDA;border:0.5px solid #BA7517;display:inline-block;vertical-align:middle;margin-right:2px"></span>待校正</span>
+            <span><span style="width:8px;height:8px;border-radius:2px;background:#E1F5EE;border:0.5px solid #1D9E75;display:inline-block;vertical-align:middle;margin-right:2px"></span>完成</span>
+            <span><span style="width:8px;height:8px;border-radius:2px;border:2px solid #185FA5;display:inline-block;vertical-align:middle;margin-right:2px"></span>今天</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="sec">各感測器週期</div>
+          <div id="sensor-cal-list"></div>
+          <button class="btn" style="width:100%;margin-top:8px;justify-content:center" onclick="sendPrompt('幫我規劃五月份所有感測器校正最佳排程')">AI 自動排程 ↗</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="sec">新增校正提醒</div>
+        <div class="g3" style="gap:8px">
+          <div><div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:4px">感測器</div><select class="sel" style="width:100%"><option>溶氧 DO</option><option>pH 電極</option><option>氨氮</option><option>鹽度</option><option>濁度</option></select></div>
+          <div><div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:4px">提前提醒</div><select class="sel" style="width:100%"><option>3 天前</option><option>7 天前</option><option>當天</option></select></div>
+          <div><div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:4px">通知管道</div><select class="sel" style="width:100%"><option>LINE + Email</option><option>僅 LINE</option><option>僅 Email</option></select></div>
+        </div>
+        <button class="btn-g" style="margin-top:10px" onclick="toast('校正提醒已新增，將提前 3 天發送')"><i class="ti ti-plus" style="font-size:13px"></i> 新增提醒</button>
+      </div>
+    </div>
+
+    <div class="page" id="page-4">
+      <div class="sec">推播通知設定</div>
+      <div class="g2" style="margin-bottom:14px">
+        <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+            <div style="width:30px;height:30px;border-radius:50%;background:#06C755;display:flex;align-items:center;justify-content:center"><i class="ti ti-brand-line" style="font-size:16px;color:#fff"></i></div>
+            <div style="flex:1"><div style="font-size:13px;font-weight:500;color:var(--color-text-primary)">LINE Notify</div><div style="font-size:11px;color:var(--color-text-success)">已連結：七股養殖場管理群</div></div>
+            <label class="tog"><input type="checkbox" checked><span class="sl"></span></label>
+          </div>
+          <input class="inp" type="password" value="●●●●●●●●●●●●●●●" style="margin-bottom:6px">
+          <button class="btn" style="font-size:11px" onclick="testNotify('LINE')"><i class="ti ti-send" style="font-size:12px"></i> 發送測試</button>
+        </div>
+        <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+            <div style="width:30px;height:30px;border-radius:50%;background:var(--color-background-info);display:flex;align-items:center;justify-content:center"><i class="ti ti-mail" style="font-size:16px;color:var(--color-text-info)"></i></div>
+            <div style="flex:1"><div style="font-size:13px;font-weight:500;color:var(--color-text-primary)">Email 通知</div><div style="font-size:11px;color:var(--color-text-success)">manager@farm.com.tw</div></div>
+            <label class="tog"><input type="checkbox" checked><span class="sl"></span></label>
+          </div>
+          <input class="inp" type="email" value="manager@farm.com.tw" style="margin-bottom:6px">
+          <button class="btn" style="font-size:11px" onclick="testNotify('Email')"><i class="ti ti-send" style="font-size:12px"></i> 發送測試</button>
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:12px">
+        <div class="sec">通知事件設定</div>
+        <div id="notify-list"></div>
+      </div>
+      <div class="card">
+        <div class="sec">靜音時段</div>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <label class="tog"><input type="checkbox" id="q-tog" onchange="document.getElementById('q-s').disabled=!this.checked;document.getElementById('q-e').disabled=!this.checked"><span class="sl"></span></label>
+          <span style="font-size:13px;color:var(--color-text-primary)">啟用靜音</span>
+          <select class="sel" id="q-s" disabled><option>22:00</option><option>23:00</option></select>
+          <span style="font-size:13px;color:var(--color-text-secondary)">至</span>
+          <select class="sel" id="q-e" disabled><option>06:00</option><option>07:00</option></select>
+          <span style="font-size:12px;color:var(--color-text-tertiary)">· 危急警示仍照常推播</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px">
+  <div style="font-size:11px;color:var(--color-text-tertiary)">
+    <i class="ti ti-copyright" aria-hidden="true" style="font-size:12px"></i> 2026 易歐特科技有限公司 · E&amp;M Auto Technology Co., Ltd. · All rights reserved.
+  </div>
+  <button class="btn-g" onclick="toast('所有設定已儲存 ✓')"><i class="ti ti-device-floppy" style="font-size:13px"></i> 儲存所有設定</button>
+</div>
+
+<div id="toast-el" style="display:none;margin-top:10px;padding:10px 16px;background:#1D9E75;color:#fff;border-radius:var(--border-radius-md);font-size:13px;text-align:center"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+function goPage(n){for(let i=0;i<5;i++){document.getElementById('page-'+i).className='page'+(i===n?' on':'');document.getElementById('nav-'+i).className='nav-item'+(i===n?' active':'');}}
+function toast(msg){const el=document.getElementById('toast-el');el.textContent=msg;el.style.display='block';setTimeout(()=>el.style.display='none',2600);}
+function testNotify(ch){toast(ch+' 測試通知已發送，請查收');}
+setInterval(()=>{const el=document.getElementById('main-clock');if(el)el.textContent=new Date().toLocaleTimeString('zh-TW');},1000);
+
+const ponds=[{id:'A1',name:'虱目魚',status:'ok',do:7.2,temp:28.5,nh3:0.22},{id:'A2',name:'白蝦',status:'danger',do:4.8,temp:29.1,nh3:0.82},{id:'A3',name:'石斑魚',status:'ok',do:6.9,temp:27.8,nh3:0.18},{id:'B1',name:'石斑魚',status:'warn',do:6.5,temp:31.0,nh3:0.35},{id:'B2',name:'吳郭魚',status:'danger',do:6.5,temp:33.2,nh3:0.55},{id:'B3',name:'虱目魚',status:'ok',do:7.0,temp:28.0,nh3:0.20}];
+const smap={ok:{cls:'b-ok',txt:'正常'},warn:{cls:'b-warn',txt:'警告'},danger:{cls:'b-danger',txt:'異常'}};
+const pl=document.getElementById('pond-status-list');
+ponds.forEach(p=>{const s=smap[p.status];pl.innerHTML+=`<div class="row"><div style="font-size:13px;font-weight:500;color:var(--color-text-primary);width:28px">${p.id}</div><div style="font-size:12px;color:var(--color-text-secondary);flex:1">${p.name} · DO ${p.do} · ${p.temp}°C · NH₃ ${p.nh3}</div><span class="badge ${s.cls}">${s.txt}</span></div>`;});
+
+const calData={3:'done',5:'done',8:'done',10:'today',12:'due',15:'due',18:'due',22:'due',25:'due'};
+const calEl=document.getElementById('cal');
+for(let i=1;i<=31;i++){const d=document.createElement('div');d.className='cal-cell '+(calData[i]||'');d.textContent=i;calEl.appendChild(d);}
+
+const sensors=[{name:'溶氧 DO',icon:'ti-droplet',freq:'7天',next:'5/10',s:'due'},{name:'pH 電極',icon:'ti-flask',freq:'14天',next:'5/10',s:'due'},{name:'氨氮',icon:'ti-atom',freq:'30天',next:'5/10',s:'due'},{name:'鹽度',icon:'ti-wave-sine',freq:'14天',next:'5/15',s:'ok'},{name:'濁度',icon:'ti-eye',freq:'30天',next:'5/20',s:'ok'},{name:'水溫',icon:'ti-thermometer',freq:'90天',next:'5/30',s:'ok'}];
+const scl=document.getElementById('sensor-cal-list');
+sensors.forEach(s=>{scl.innerHTML+=`<div class="row" style="padding:7px 0"><i class="ti ${s.icon}" aria-hidden="true" style="font-size:14px;color:var(--color-text-secondary)"></i><div style="flex:1;margin-left:4px"><div style="font-size:12px;font-weight:500;color:var(--color-text-primary)">${s.name} <span style="font-weight:400;color:var(--color-text-tertiary)">·每${s.freq}</span></div><div style="font-size:11px;color:var(--color-text-secondary)">下次 ${s.next}</div></div><span class="badge ${s.s==='due'?'b-warn':'b-ok'}">${s.s==='due'?'待校正':'正常'}</span></div>`;});
+
+const notifyEvts=[{lbl:'感測器超標警示',sub:'任一參數超危險閾值',line:true,email:true,lvl:'#E24B4A'},{lbl:'感測器偏離警告',sub:'進入警戒區間',line:true,email:false,lvl:'#BA7517'},{lbl:'自動換水執行通知',sub:'系統換水時回報',line:true,email:true,lvl:'#185FA5'},{lbl:'感測器校正提醒',sub:'校正日前 3 天',line:false,email:true,lvl:'#185FA5'},{lbl:'感測器離線',sub:'連線中斷 5 分鐘',line:true,email:true,lvl:'#E24B4A'},{lbl:'每日水質日報',sub:'每天 07:00',line:false,email:true,lvl:'#1D9E75'}];
+const nl=document.getElementById('notify-list');
+notifyEvts.forEach(e=>{nl.innerHTML+=`<div class="row"><div style="width:4px;height:36px;background:${e.lvl};flex-shrink:0;border-radius:0"></div><div style="flex:1;padding-left:8px"><div style="font-size:13px;font-weight:500;color:var(--color-text-primary)">${e.lbl}</div><div style="font-size:11px;color:var(--color-text-secondary)">${e.sub}</div></div><div style="display:flex;gap:14px;flex-shrink:0"><div style="text-align:center"><div style="font-size:10px;color:var(--color-text-tertiary);margin-bottom:2px">LINE</div><label class="tog" style="width:34px;height:18px"><input type="checkbox" ${e.line?'checked':''}><span class="sl"></span></label></div><div style="text-align:center"><div style="font-size:10px;color:var(--color-text-tertiary);margin-bottom:2px">Email</div><label class="tog" style="width:34px;height:18px"><input type="checkbox" ${e.email?'checked':''}><span class="sl"></span></label></div></div></div>`;});
+
+const hrs=Array.from({length:24},(_,i)=>String(i).padStart(2,'0')+':00');
+const doData=[6.2,6.0,6.3,6.6,6.9,7.1,7.2,7.4,7.5,7.3,7.1,6.9,7.0,7.2,7.3,7.1,7.0,6.9,7.0,7.1,7.1,7.1,7.1,7.1];
+new Chart(document.getElementById('overviewChart'),{type:'line',data:{labels:hrs,datasets:[{label:'溶氧',data:doData,borderColor:'#1D9E75',backgroundColor:'#1D9E7518',fill:true,tension:0.4,pointRadius:0,borderWidth:2},{label:'警戒',data:Array(24).fill(5.0),borderColor:'#E24B4A',borderDash:[4,3],pointRadius:0,borderWidth:1.2,fill:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{maxTicksLimit:6,font:{size:10}},grid:{display:false}},y:{min:4,max:9,ticks:{font:{size:10},stepSize:1},grid:{color:'rgba(120,120,120,0.1)'}}}}});
+
+const sensorSets={do:{data:doData,color:'#1D9E75',min:4,max:9},nh3:{data:[0.22,0.24,0.28,0.35,0.44,0.52,0.60,0.68,0.74,0.78,0.80,0.82,0.82,0.81,0.80,0.80,0.79,0.78,0.77,0.76,0.76,0.75,0.74,0.74],color:'#E24B4A',min:0,max:1.2},temp:{data:[27,27,27,27.5,28,28.5,29,29.8,30.3,30.8,31,31.2,31.4,31.4,31.3,31.2,31,30.8,30.5,30.2,30,29.8,29.5,29.2],color:'#BA7517',min:24,max:34},sal:{data:[17.8,17.9,18,18.1,18.2,18.2,18.3,18.3,18.3,18.3,18.3,18.3,18.3,18.3,18.3,18.3,18.3,18.2,18.2,18.2,18.2,18.2,18.3,18.3],color:'#7F77DD',min:15,max:25},ph:{data:[7.2,7.1,7.0,6.9,7.0,7.2,7.4,7.5,7.6,7.7,7.8,7.8,7.8,7.8,7.8,7.8,7.8,7.8,7.8,7.8,7.8,7.8,7.8,7.8],color:'#185FA5',min:6,max:9}};
+let sChart;
+function updateSensorChart(){const key=document.getElementById('sensor-sel').value;const sd=sensorSets[key];if(sChart)sChart.destroy();sChart=new Chart(document.getElementById('sensorChart'),{type:'line',data:{labels:hrs,datasets:[{label:key,data:sd.data,borderColor:sd.color,backgroundColor:sd.color+'18',fill:true,tension:0.4,pointRadius:0,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{maxTicksLimit:6,font:{size:10}},grid:{display:false}},y:{min:sd.min,max:sd.max,ticks:{font:{size:10},maxTicksLimit:5},grid:{color:'rgba(120,120,120,0.1)'}}}}});}
+setTimeout(updateSensorChart,100);
+</script>
+</div>
+<footer>© 2026 易歐特科技有限公司　|　AquaCloud 漁業養殖雲端監控系統</footer>
+</body>
+</html>
