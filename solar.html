@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>太陽能電站監控 — 易歐特科技有限公司</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#1a2d4e;
+  --font-sans:'Noto Sans TC',sans-serif;
+  --color-text-primary:#1a2332;--color-text-secondary:#3a4a5c;--color-text-tertiary:#7a8fa8;
+  --color-background-primary:#fff;--color-background-secondary:#f5f8fc;
+  --color-border-tertiary:rgba(26,45,78,0.08);--color-border-secondary:rgba(26,45,78,0.15);
+  --color-background-success:#EAF3DE;--color-text-success:#3B6D11;
+  --color-background-warning:#FAEEDA;--color-text-warning:#854F0B;--color-border-warning:#EF9F27;
+  --color-background-danger:#FCEBEB;--color-text-danger:#A32D2D;
+  --color-background-info:#E6F1FB;--color-text-info:#185FA5;--color-border-info:#378ADD;
+  --border-radius-md:8px;--border-radius-lg:12px;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --color-text-primary:#e8e6de;--color-text-secondary:#a8a49c;--color-text-tertiary:#6a6860;
+    --color-background-primary:#1c1c1a;--color-background-secondary:#252523;
+    --color-border-tertiary:rgba(255,255,255,0.08);--color-border-secondary:rgba(255,255,255,0.15);
+    --color-background-success:#1a2d12;--color-text-success:#97C459;
+    --color-background-warning:#2d1f08;--color-text-warning:#FAC775;--color-border-warning:#854F0B;
+    --color-background-danger:#2d1212;--color-text-danger:#F09595;
+    --color-background-info:#0c1e2d;--color-text-info:#85B7EB;--color-border-info:#185FA5;
+  }
+}
+body{font-family:var(--font-sans);background:var(--color-background-secondary);color:var(--color-text-primary);font-size:14px;line-height:1.6}
+
+/* ── Top nav ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(26,45,78,0.97);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,0.08);padding:0 5%;display:flex;align-items:center;justify-content:space-between;height:56px}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.nav-logo span{color:white;font-size:13px}
+.nav-logo strong{color:rgba(255,255,255,0.5);font-size:11px;font-weight:300;margin-left:6px}
+.nav-back{color:rgba(255,255,255,0.65);font-size:12px;text-decoration:none;display:flex;align-items:center;gap:5px;transition:color .2s}
+.nav-back:hover{color:white}
+.badge-live{font-size:11px;padding:3px 10px;border-radius:99px;background:rgba(232,160,32,.2);color:#e8a020;border:.5px solid #e8a020;display:flex;align-items:center;gap:5px}
+.bdot{width:6px;height:6px;border-radius:50%;background:#e8a020;animation:blink2 1.4s infinite}
+@keyframes blink2{0%,100%{opacity:1}50%{opacity:.25}}
+
+.wrap{padding:72px 5% 2rem;max-width:1200px;margin:0 auto}
+footer{margin-top:2rem;padding:1rem 5%;text-align:center;font-size:12px;color:var(--color-text-tertiary);border-top:.5px solid var(--color-border-tertiary)}
+
+/* ── Dashboard styles ── */
+.app{padding:0;font-family:var(--font-sans);color:var(--color-text-primary)}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;flex-wrap:wrap;gap:8px}
+.appname{display:flex;flex-direction:column;gap:3px}
+.company{font-size:16px;font-weight:500;color:var(--color-text-primary)}
+.subtitle{font-size:12px;color:var(--color-text-secondary);display:flex;align-items:center;gap:6px}
+.live{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;background:var(--color-background-success);color:var(--color-text-success);padding:3px 8px;border-radius:var(--border-radius-md)}
+.pulse{width:6px;height:6px;border-radius:50%;background:currentColor;animation:blink 1.4s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.tabs{display:flex;gap:2px;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:1.25rem;flex-wrap:wrap}
+.tab{padding:6px 13px;font-size:12px;cursor:pointer;color:var(--color-text-secondary);border-bottom:2px solid transparent;margin-bottom:-0.5px;background:none;border-left:none;border-right:none;border-top:none;font-family:var(--font-sans);display:flex;align-items:center;gap:5px}
+.tab.on{color:var(--color-text-primary);border-bottom-color:var(--color-text-primary);font-weight:500}
+.tab:hover:not(.on){color:var(--color-text-primary)}
+.kg{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:1.25rem}
+.kc{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:11px 13px}
+.kl{font-size:11px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px;display:flex;align-items:center;gap:4px}
+.kv{font-size:20px;font-weight:500;line-height:1.2}
+.ku{font-size:11px;font-weight:400;color:var(--color-text-secondary);margin-left:2px}
+.kd{font-size:11px;margin-top:2px}
+.du{color:var(--color-text-success)}.dd{color:var(--color-text-danger)}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:13px 15px;margin-bottom:12px}
+.ct{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:11px;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.ct button{font-size:11px;padding:3px 8px;border-radius:var(--border-radius-md);border:.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);color:var(--color-text-primary);cursor:pointer}
+.two{display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:12px}
+.half{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+@media(max-width:500px){.two,.half{grid-template-columns:1fr}}
+.leg{display:flex;gap:12px;flex-wrap:wrap}
+.li{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--color-text-secondary)}
+.ld{width:8px;height:8px;border-radius:2px}
+.inv-tbl{width:100%;font-size:12px;border-collapse:collapse;table-layout:fixed}
+.inv-tbl th{font-weight:500;color:var(--color-text-secondary);text-align:left;padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:11px}
+.inv-tbl td{padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.inv-tbl tr:last-child td{border-bottom:none}
+.sdot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:4px;vertical-align:middle}
+.wgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.wi{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:9px 11px}
+.wl{font-size:11px;color:var(--color-text-secondary);margin-bottom:2px}
+.wv{font-size:15px;font-weight:500}
+.alert-b{background:var(--color-background-warning);border:0.5px solid var(--color-border-warning);border-radius:var(--border-radius-md);padding:7px 11px;font-size:12px;color:var(--color-text-warning);display:flex;align-items:center;gap:7px;margin-bottom:12px}
+.site-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:0.5px solid var(--color-border-tertiary);cursor:pointer}
+.site-row:last-child{border-bottom:none}
+.site-row:hover{background:var(--color-background-secondary);margin:0 -8px;padding:9px 8px;border-radius:var(--border-radius-md)}
+.stag{font-size:11px;padding:2px 7px;border-radius:var(--border-radius-md)}
+.bok{background:var(--color-background-success);color:var(--color-text-success)}
+.bwarn{background:var(--color-background-warning);color:var(--color-text-warning)}
+.berr{background:var(--color-background-danger);color:var(--color-text-danger)}
+.map-wrap{position:relative}
+.tip{position:absolute;background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:8px 11px;font-size:12px;pointer-events:none;display:none;z-index:10;min-width:148px}
+.rpt-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.rpt-opt{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:12px;cursor:pointer}
+.rpt-opt.sel{border-color:var(--color-border-info);background:var(--color-background-info)}
+.rpt-opt.sel .ro-t{color:var(--color-text-info)}
+.rpt-opt.sel .ro-i{color:var(--color-text-info)}
+.ro-i{font-size:18px;color:var(--color-text-secondary);margin-bottom:5px}
+.ro-t{font-size:13px;font-weight:500;margin-bottom:2px}
+.ro-d{font-size:11px;color:var(--color-text-secondary)}
+.frow{display:flex;gap:8px;align-items:center;margin-bottom:9px;flex-wrap:wrap}
+.frow label{font-size:12px;color:var(--color-text-secondary);min-width:48px}
+.frow select,.frow input{flex:1;font-size:12px;padding:5px 8px;border-radius:var(--border-radius-md);border:.5px solid var(--color-border-tertiary);background:var(--color-background-primary);color:var(--color-text-primary);font-family:var(--font-sans)}
+.ptbl{width:100%;font-size:11px;border-collapse:collapse;table-layout:fixed}
+.ptbl th{font-weight:500;color:var(--color-text-secondary);text-align:left;padding:5px;border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);font-size:11px}
+.ptbl td{padding:5px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.ptbl tr:last-child td{border-bottom:none}
+.dlbar{display:flex;gap:8px;margin-top:11px;flex-wrap:wrap}
+.dlbar button{font-size:12px;padding:5px 10px;border-radius:var(--border-radius-md);border:.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);color:var(--color-text-primary);cursor:pointer;display:flex;align-items:center;gap:4px;font-family:var(--font-sans)}
+.alrow{display:flex;align-items:flex-start;gap:9px;padding:9px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.alrow:last-child{border-bottom:none}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">
+    <svg width="32" height="32" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="28" cy="28" r="25" fill="none" stroke="#3a7bc8" stroke-width="1.6"/>
+      <circle cx="28" cy="28" r="17" fill="#1e3a62"/>
+      <text x="28" y="32" text-anchor="middle" fill="#7aafd4" font-size="9.5" font-family="Arial" font-weight="400" letter-spacing="1">ema</text>
+      <circle cx="46" cy="9" r="5" fill="#00d4ff"/>
+    </svg>
+    <span>易歐特科技有限公司<strong>太陽能電站監控</strong></span>
+  </div>
+  <div style="display:flex;align-items:center;gap:14px">
+    <div class="badge-live"><span class="bdot"></span>即時監控</div>
+    <a href="index.html" class="nav-back"><i class="ti ti-arrow-left" style="font-size:14px"></i>回官網</a>
+  </div>
+</nav>
+
+<div class="wrap">
+  <div class="app">
+    <div class="topbar">
+      <div class="appname">
+        <div class="company">
+          <i class="ti ti-solar-panel" aria-hidden="true" style="font-size:18px;color:#e8a020;vertical-align:-2px;margin-right:6px"></i>易歐特科技有限公司
+        </div>
+        <div class="subtitle">太陽能電站雲端監控系統</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <div class="live"><span class="pulse"></span>即時監控</div>
+        <span style="font-size:12px;color:var(--color-text-secondary)" id="clk"></span>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab on" onclick="sw('overview')"><i class="ti ti-layout-dashboard" aria-hidden="true"></i>概覽</button>
+      <button class="tab" onclick="sw('map')"><i class="ti ti-map-2" aria-hidden="true"></i>站點地圖</button>
+      <button class="tab" onclick="sw('sites')"><i class="ti ti-building-factory-2" aria-hidden="true"></i>多站管理</button>
+      <button class="tab" onclick="sw('inverters')"><i class="ti ti-cpu" aria-hidden="true"></i>逆變器</button>
+      <button class="tab" onclick="sw('history')"><i class="ti ti-chart-area" aria-hidden="true"></i>歷史資料</button>
+      <button class="tab" onclick="sw('report')"><i class="ti ti-file-spreadsheet" aria-hidden="true"></i>報表匯出</button>
+      <button class="tab" onclick="sw('alerts')"><i class="ti ti-bell" aria-hidden="true"></i>告警</button>
+    </div>
+
+    <div id="p-overview">
+      <div class="alert-b"><i class="ti ti-alert-triangle" aria-hidden="true"></i>INV-03 效率偏低（82%），建議檢查直流側接線｜彰化芳苑廠停機中</div>
+      <div class="kg">
+        <div class="kc"><div class="kl"><i class="ti ti-bolt" aria-hidden="true"></i>即時總功率</div><div class="kv" id="kv-pwr">2,093<span class="ku">kW</span></div><div class="kd du">↑ 11.2% 較昨日</div></div>
+        <div class="kc"><div class="kl"><i class="ti ti-chart-area" aria-hidden="true"></i>今日總發電</div><div class="kv">11,842<span class="ku">kWh</span></div><div class="kd du">↑ 7.8%</div></div>
+        <div class="kc"><div class="kl"><i class="ti ti-building-factory-2" aria-hidden="true"></i>正常站點</div><div class="kv">4<span class="ku">/6</span></div><div class="kd dd">1告警 1停機</div></div>
+        <div class="kc"><div class="kl"><i class="ti ti-activity" aria-hidden="true"></i>整體效率</div><div class="kv" id="kv-eff">91.8<span class="ku">%</span></div><div class="kd du">↑ 0.6%</div></div>
+        <div class="kc"><div class="kl"><i class="ti ti-coin" aria-hidden="true"></i>今日總收益</div><div class="kv">NT$<span id="kv-rev">14,047</span></div><div class="kd du">↑ NT$1,120</div></div>
+        <div class="kc"><div class="kl"><i class="ti ti-leaf" aria-hidden="true"></i>碳減排</div><div class="kv">5.92<span class="ku">噸</span></div><div class="kd" style="color:var(--color-text-secondary)">今日合計</div></div>
+      </div>
+      <div class="two">
+        <div class="card">
+          <div class="ct">今日總發電曲線<div class="leg"><span class="li"><span class="ld" style="background:#e8a020"></span>實際</span><span class="li"><span class="ld" style="background:#b3c8e8"></span>理論</span></div></div>
+          <div style="position:relative;height:190px"><canvas id="c-main" role="img" aria-label="今日發電曲線圖">今日發電功率</canvas></div>
+        </div>
+        <div class="card">
+          <div class="ct">系統PR值</div>
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:150px">
+            <svg id="gauge" width="130" height="120" viewBox="0 0 130 120" aria-label="PR值儀表"></svg>
+            <div style="font-size:11px;color:var(--color-text-secondary);margin-top:4px;text-transform:uppercase;letter-spacing:.05em">Performance Ratio</div>
+          </div>
+        </div>
+      </div>
+      <div class="half">
+        <div class="card">
+          <div class="ct">氣象資料</div>
+          <div class="wgrid">
+            <div class="wi"><div class="wl"><i class="ti ti-sun" aria-hidden="true"></i> 輻照度</div><div class="wv">823 W/m²</div></div>
+            <div class="wi"><div class="wl"><i class="ti ti-temperature" aria-hidden="true"></i> 板溫</div><div class="wv">51.3°C</div></div>
+            <div class="wi"><div class="wl"><i class="ti ti-wind" aria-hidden="true"></i> 風速</div><div class="wv">2.4 m/s</div></div>
+            <div class="wi"><div class="wl"><i class="ti ti-cloud" aria-hidden="true"></i> 天氣</div><div class="wv">多雲晴</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="ct">本週各站發電(kWh)</div>
+          <div style="position:relative;height:120px"><canvas id="c-week" role="img" aria-label="本週各站發電量">本週發電</canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="p-map" style="display:none">
+      <div class="kg">
+        <div class="kc"><div class="kl">總裝機容量</div><div class="kv">3,840<span class="ku">kW</span></div></div>
+        <div class="kc"><div class="kl">運行站點</div><div class="kv">4<span class="ku">/6</span></div></div>
+        <div class="kc"><div class="kl">即時總功率</div><div class="kv">2,093<span class="ku">kW</span></div></div>
+        <div class="kc"><div class="kl">今日總收益</div><div class="kv">NT$14,047</div></div>
+      </div>
+      <div class="card map-wrap">
+        <div class="ct">台灣站點分布 <span style="font-weight:400;text-transform:none;letter-spacing:0">點擊站點進入管理</span></div>
+        <div class="tip" id="tip"></div>
+        <svg id="twmap" style="width:100%;height:380px;display:block" viewBox="0 0 280 420"></svg>
+        <div style="display:flex;gap:16px;margin-top:10px;flex-wrap:wrap">
+          <span class="li"><span style="width:10px;height:10px;border-radius:50%;background:#2ecc71;display:inline-block;margin-right:4px"></span>正常</span>
+          <span class="li"><span style="width:10px;height:10px;border-radius:50%;background:#f39c12;display:inline-block;margin-right:4px"></span>告警</span>
+          <span class="li"><span style="width:10px;height:10px;border-radius:50%;background:#e74c3c;display:inline-block;margin-right:4px"></span>停機</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="p-sites" style="display:none">
+      <div class="card">
+        <div class="ct">全站一覽</div>
+        <div id="site-list"></div>
+      </div>
+      <div class="card" id="site-detail" style="display:none">
+        <div class="ct" id="sd-title">站點詳情</div>
+        <div id="sd-body"></div>
+        <div style="position:relative;height:150px;margin-top:12px"><canvas id="c-site" role="img" aria-label="站點近7日發電趨勢">站點趨勢</canvas></div>
+      </div>
+    </div>
+
+    <div id="p-inverters" style="display:none">
+      <div class="alert-b"><i class="ti ti-alert-triangle" aria-hidden="true"></i>INV-03 效率 82.1%，低於門檻值 90%，建議安排檢修</div>
+      <div class="card">
+        <div class="ct">逆變器即時狀態</div>
+        <div style="overflow-x:auto">
+          <table class="inv-tbl">
+            <thead><tr><th>設備</th><th>狀態</th><th>功率</th><th>效率</th><th>溫度</th><th>累計電量</th></tr></thead>
+            <tbody id="inv-body"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="ct">功率對比</div>
+        <div style="position:relative;height:200px"><canvas id="c-inv" role="img" aria-label="逆變器功率對比">逆變器功率</canvas></div>
+      </div>
+    </div>
+
+    <div id="p-history" style="display:none">
+      <div class="kg">
+        <div class="kc"><div class="kl">年度累計</div><div class="kv">824,560<span class="ku">kWh</span></div></div>
+        <div class="kc"><div class="kl">年度收益</div><div class="kv">NT$1.15M</div></div>
+        <div class="kc"><div class="kl">年均效率</div><div class="kv">92.8<span class="ku">%</span></div></div>
+        <div class="kc"><div class="kl">年碳減排</div><div class="kv">412<span class="ku">噸</span></div></div>
+      </div>
+      <div class="card">
+        <div class="ct">近30日發電量趨勢</div>
+        <div style="position:relative;height:210px"><canvas id="c-hist" role="img" aria-label="近30日發電趨勢">歷史趨勢</canvas></div>
+      </div>
+    </div>
+
+    <div id="p-report" style="display:none">
+      <div class="card">
+        <div class="ct">報表類型</div>
+        <div class="rpt-grid">
+          <div class="rpt-opt sel" onclick="selRpt(this,'daily')"><div class="ro-i"><i class="ti ti-calendar-day" aria-hidden="true"></i></div><div class="ro-t">日報表</div><div class="ro-d">每日發電量、效率、收益</div></div>
+          <div class="rpt-opt" onclick="selRpt(this,'monthly')"><div class="ro-i"><i class="ti ti-calendar-month" aria-hidden="true"></i></div><div class="ro-t">月報表</div><div class="ro-d">月度統計與趨勢分析</div></div>
+          <div class="rpt-opt" onclick="selRpt(this,'inv')"><div class="ro-i"><i class="ti ti-cpu" aria-hidden="true"></i></div><div class="ro-t">設備報表</div><div class="ro-d">逆變器效能與維護記錄</div></div>
+          <div class="rpt-opt" onclick="selRpt(this,'carbon')"><div class="ro-i"><i class="ti ti-leaf" aria-hidden="true"></i></div><div class="ro-t">碳減排報表</div><div class="ro-d">碳排放量與環境效益</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="ct">報表設定</div>
+        <div class="frow"><label>站點</label><select><option>全部站點</option><option>台南永康廠區</option><option>高雄大寮農場</option><option>屏東枋寮漁電</option><option>台中工業區</option><option>彰化芳苑風光</option><option>雲林麥寮廠</option></select></div>
+        <div class="frow"><label>起始日</label><input type="date" value="2026-05-01"><label style="min-width:36px">結束日</label><input type="date" value="2026-05-10"></div>
+        <div class="frow"><label>格式</label><select><option>CSV（逗號分隔）</option><option>Excel (.xlsx)</option><option>PDF報告</option></select></div>
+      </div>
+      <div class="card">
+        <div class="ct">預覽 — <span id="rpt-label" style="color:var(--color-text-info)">日報表</span></div>
+        <div style="overflow-x:auto"><table class="ptbl" id="ptbl"></table></div>
+        <div class="dlbar">
+          <button onclick="dl('CSV')"><i class="ti ti-download" aria-hidden="true"></i>匯出 CSV</button>
+          <button onclick="dl('Excel')"><i class="ti ti-file-spreadsheet" aria-hidden="true"></i>匯出 Excel</button>
+          <button onclick="dl('PDF')"><i class="ti ti-file-type-pdf" aria-hidden="true"></i>匯出 PDF</button>
+        </div>
+        <div id="dl-msg" style="font-size:12px;margin-top:8px;display:none"></div>
+      </div>
+    </div>
+
+    <div id="p-alerts" style="display:none">
+      <div class="card">
+        <div class="ct">系統告警記錄</div>
+        <div id="alert-list"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>© 2026 易歐特科技有限公司　|　太陽能電站雲端監控系統</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const D=matchMedia('(prefers-color-scheme: dark)').matches;
+const tc=D?'rgba(255,255,255,0.45)':'rgba(0,0,0,0.4)';
+const gc=D?'rgba(255,255,255,0.07)':'rgba(0,0,0,0.06)';
+const PAGES=['overview','map','sites','inverters','history','report','alerts'];
+let charts={};
+function sw(n){
+  PAGES.forEach(p=>{document.getElementById('p-'+p).style.display=p===n?'':'none'});
+  document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('on',PAGES[i]===n));
+  if(n==='map'&&!window._mapDone){drawMap();window._mapDone=true}
+  if(n==='sites'&&!window._sitesDone){buildSiteList();window._sitesDone=true}
+  if(n==='inverters'&&!window._invDone){buildInv();window._invDone=true}
+  if(n==='history'&&!window._histDone){buildHist();window._histDone=true}
+  if(n==='report'&&!window._rptDone){buildPreview('daily');window._rptDone=true}
+  if(n==='alerts'&&!window._alDone){buildAlerts();window._alDone=true}
+}
+const SITES=[
+  {id:'S1',name:'台南永康廠區',city:'台南',cap:800,pwr:487,eff:94,st:'ok',lat:23.03,lon:120.23,rev:3276,today:2341},
+  {id:'S2',name:'高雄大寮農場',city:'高雄',cap:640,pwr:402,eff:95,st:'ok',lat:22.61,lon:120.40,rev:2698,today:1920},
+  {id:'S3',name:'屏東枋寮漁電',city:'屏東',cap:500,pwr:261,eff:78,st:'warn',lat:22.36,lon:120.62,rev:1752,today:1340},
+  {id:'S4',name:'台中工業區',city:'台中',cap:720,pwr:601,eff:96,st:'ok',lat:24.15,lon:120.68,rev:4027,today:2820},
+  {id:'S5',name:'彰化芳苑風光',city:'彰化',cap:680,pwr:0,eff:0,st:'err',lat:23.98,lon:120.27,rev:0,today:0},
+  {id:'S6',name:'雲林麥寮廠',city:'雲林',cap:500,pwr:342,eff:91,st:'ok',lat:23.76,lon:120.25,rev:2294,today:1580},
+];
+const SC={ok:'#2ecc71',warn:'#f39c12',err:'#e74c3c'};
+const SL={ok:'正常',warn:'告警',err:'停機'};
+function mkChart(id,cfg){if(charts[id]){charts[id].destroy()}charts[id]=new Chart(document.getElementById(id),cfg);return charts[id]}
+const hrs=Array.from({length:24},(_,i)=>i+':00');
+const act=[0,0,0,0,0,0,15,65,148,262,358,430,487,472,446,401,330,225,118,42,8,0,0,0];
+const thr=[0,0,0,0,0,0,20,75,162,278,372,448,502,490,461,415,345,238,128,50,10,0,0,0];
+mkChart('c-main',{type:'line',data:{labels:hrs,datasets:[
+  {label:'理論',data:thr,borderColor:'#b3c8e8',borderWidth:1.5,borderDash:[4,3],pointRadius:0,tension:.4,fill:false},
+  {label:'實際',data:act,borderColor:'#e8a020',borderWidth:2,pointRadius:0,tension:.4,fill:true,backgroundColor:D?'rgba(232,160,32,0.1)':'rgba(232,160,32,0.07)'}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:tc,font:{size:9},maxTicksLimit:8},grid:{color:gc}},y:{ticks:{color:tc,font:{size:10}},grid:{color:gc}}}}});
+mkChart('c-week',{type:'bar',data:{labels:SITES.map(s=>s.city),datasets:[{data:SITES.map(s=>s.today),backgroundColor:SITES.map(s=>s.st==='err'?'rgba(231,76,60,0.5)':s.st==='warn'?'rgba(243,156,18,0.6)':'#e8a020'),borderRadius:3,barThickness:18}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:tc,font:{size:10}},grid:{color:gc}},y:{ticks:{color:tc,font:{size:10}},grid:{color:gc}}}}});
+function drawGauge(v){
+  const svg=document.getElementById('gauge');
+  const r=48,cx=65,cy=68;
+  const sa=Math.PI*.8,ea=Math.PI*2.2;
+  const xy=(a,rr)=>[cx+rr*Math.cos(a),cy+rr*Math.sin(a)];
+  const sw2=(ea-sa)*(v/100);
+  const[sx,sy]=xy(sa,r);const[ex,ey]=xy(sa+sw2,r);const[bx,by]=xy(ea,r);
+  const lg=sw2>Math.PI?1:0;
+  const fill=D?'rgba(255,255,255,0.1)':'rgba(0,0,0,0.07)';
+  svg.innerHTML=`<path d="M${sx},${sy} A${r},${r} 0 1 1 ${bx},${by}" fill="none" stroke="${fill}" stroke-width="9" stroke-linecap="round"/><path d="M${sx},${sy} A${r},${r} 0 ${lg} 1 ${ex},${ey}" fill="none" stroke="#e8a020" stroke-width="9" stroke-linecap="round"/><text x="${cx}" y="${cy-2}" text-anchor="middle" font-size="24" font-weight="500" fill="${D?'#fff':'#1a1a1a'}">${v.toFixed(1)}%</text>`;
+}
+drawGauge(85.4);
+function latXY(lat,lon){const x=(lon-119.85)/(121.65-119.85)*230+25;const y=(25.35-lat)/(25.35-21.85)*360+25;return[x,y]}
+function drawMap(){
+  const svg=document.getElementById('twmap');
+  const P=`M138,16 L150,24 L162,38 L167,54 L173,72 L177,92 L175,115 L169,138 L163,162 L157,182 L150,204 L143,225 L136,246 L129,265 L121,280 L113,293 L105,305 L97,317 L91,330 L86,344 L89,358 L96,365 L110,369 L124,371 L140,369 L153,363 L162,352 L166,340 L161,326 L155,313 L148,299 L142,283 L138,265 L136,246`;
+  const bg=D?'#252525':'#eeeee8';const str=D?'rgba(255,255,255,0.12)':'rgba(0,0,0,0.1)';
+  let h=`<path d="${P}" fill="${bg}" stroke="${str}" stroke-width="1.5" stroke-linejoin="round"/>`;
+  SITES.forEach(s=>{const[x,y]=latXY(s.lat,s.lon);const col=SC[s.st];h+=`<g class="mp" data-id="${s.id}" style="cursor:pointer"><circle cx="${x}" cy="${y}" r="12" fill="${col}" opacity="0.15"/><circle cx="${x}" cy="${y}" r="8" fill="${col}" stroke="${D?'rgba(0,0,0,0.4)':'rgba(255,255,255,0.9)'}" stroke-width="1.5"/><text x="${x+11}" y="${y+4}" font-size="9" fill="${D?'rgba(255,255,255,0.8)':'rgba(0,0,0,0.65)'}" font-family="sans-serif">${s.name.slice(0,3)}</text></g>`});
+  svg.innerHTML=h;
+  svg.querySelectorAll('.mp').forEach(pin=>{
+    const s=SITES.find(x=>x.id===pin.dataset.id);
+    pin.addEventListener('mouseenter',e=>{const t=document.getElementById('tip');t.innerHTML=`<div style="font-weight:500;margin-bottom:4px">${s.name}</div><div style="color:var(--color-text-secondary);font-size:11px">裝機：${s.cap} kW</div><div style="color:var(--color-text-secondary);font-size:11px">功率：${s.pwr} kW</div><div style="color:var(--color-text-secondary);font-size:11px">狀態：<span style="color:${SC[s.st]}">${SL[s.st]}</span></div><div style="color:var(--color-text-secondary);font-size:11px">收益：NT$${s.rev.toLocaleString()}</div>`;t.style.display='block';t.style.left=(e.offsetX+14)+'px';t.style.top=(e.offsetY-8)+'px'});
+    pin.addEventListener('mouseleave',()=>{document.getElementById('tip').style.display='none'});
+    pin.addEventListener('click',()=>{sw('sites');setTimeout(()=>showSiteDetail(s.id),80)});
+  });
+}
+function buildSiteList(){
+  const c=document.getElementById('site-list');c.innerHTML='';
+  SITES.forEach(s=>{const r=document.createElement('div');r.className='site-row';r.innerHTML=`<span style="width:9px;height:9px;border-radius:50%;background:${SC[s.st]};flex-shrink:0;display:inline-block"></span><span style="font-size:13px;font-weight:500;flex:1">${s.name}<span style="font-size:11px;color:var(--color-text-secondary);margin-left:6px">${s.city}</span></span><span class="stag b${s.st}">${SL[s.st]}</span><div style="text-align:right;min-width:70px"><div style="font-size:13px;font-weight:500">${s.pwr} <span style="font-size:11px;font-weight:400;color:var(--color-text-secondary)">kW</span></div><div style="font-size:10px;color:var(--color-text-secondary)">${s.cap} kW裝機</div></div>`;r.onclick=()=>showSiteDetail(s.id);c.appendChild(r)});
+}
+let siteChInst=null;
+function showSiteDetail(id){
+  const s=SITES.find(x=>x.id===id);
+  document.getElementById('sd-title').textContent=s.name+' — 詳情';
+  document.getElementById('sd-body').innerHTML=`<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px"><div class="kc"><div class="kl">即時功率</div><div class="kv" style="font-size:16px">${s.pwr}<span class="ku">kW</span></div></div><div class="kc"><div class="kl">效率</div><div class="kv" style="font-size:16px">${s.eff}<span class="ku">%</span></div></div><div class="kc"><div class="kl">今日收益</div><div class="kv" style="font-size:16px">NT$${s.rev.toLocaleString()}</div></div></div>`;
+  document.getElementById('site-detail').style.display='';
+  const lbs=['5/4','5/5','5/6','5/7','5/8','5/9','5/10'];
+  const dt=lbs.map((_,i)=>i===6?s.today:Math.round(s.today*0.8+Math.random()*s.today*0.35));
+  if(siteChInst){siteChInst.destroy()}
+  siteChInst=new Chart(document.getElementById('c-site'),{type:'line',data:{labels:lbs,datasets:[{data:dt,borderColor:'#e8a020',borderWidth:2,pointRadius:3,pointBackgroundColor:'#e8a020',tension:.4,fill:true,backgroundColor:D?'rgba(232,160,32,0.1)':'rgba(232,160,32,0.07)'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:tc,font:{size:10}},grid:{color:gc}},y:{ticks:{color:tc,font:{size:10}},grid:{color:gc}}}}});
+  document.getElementById('site-detail').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+const INVS=[{id:'INV-01',st:'ok',pwr:128.4,eff:96.2,temp:42,total:18420},{id:'INV-02',st:'ok',pwr:125.1,eff:95.8,temp:44,total:17980},{id:'INV-03',st:'warn',pwr:98.7,eff:82.1,temp:58,total:16340},{id:'INV-04',st:'ok',pwr:135.1,eff:96.5,temp:41,total:19120}];
+function buildInv(){
+  const tb=document.getElementById('inv-body');
+  INVS.forEach(v=>{const tr=document.createElement('tr');tr.innerHTML=`<td style="font-weight:500">${v.id}</td><td><span class="sdot" style="background:${SC[v.st]}"></span>${SL[v.st]}</td><td>${v.pwr.toFixed(1)} kW</td><td style="color:${v.eff<90?'var(--color-text-danger)':'var(--color-text-success)'}">${v.eff.toFixed(1)}%</td><td>${v.temp}°C</td><td>${v.total.toLocaleString()} kWh</td>`;tb.appendChild(tr)});
+  mkChart('c-inv',{type:'bar',data:{labels:INVS.map(v=>v.id),datasets:[{label:'功率',data:INVS.map(v=>v.pwr),backgroundColor:INVS.map(v=>v.st==='warn'?'#d97706':'#e8a020'),borderRadius:4,barThickness:28,yAxisID:'y'},{label:'效率',data:INVS.map(v=>v.eff),backgroundColor:D?'rgba(255,255,255,0.13)':'rgba(0,0,0,0.09)',borderRadius:4,barThickness:28,yAxisID:'y2'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:tc},grid:{color:gc}},y:{ticks:{color:tc,font:{size:10}},grid:{color:gc},title:{display:true,text:'kW',color:tc,font:{size:10}}},y2:{position:'right',ticks:{color:tc,font:{size:10}},grid:{display:false},title:{display:true,text:'%',color:tc,font:{size:10}}}}}});
+}
+function buildHist(){
+  const days=Array.from({length:30},(_,i)=>`5/${i+1}`);
+  const hd=days.map(()=>Math.round(9800+Math.random()*3200));
+  mkChart('c-hist',{type:'bar',data:{labels:days,datasets:[{data:hd,backgroundColor:D?'rgba(232,160,32,0.5)':'rgba(232,160,32,0.6)',borderRadius:3,barThickness:11}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:tc,font:{size:9},maxTicksLimit:10},grid:{color:gc}},y:{ticks:{color:tc,font:{size:10}},grid:{color:gc}}}}});
+}
+const RPT_DATA={
+  daily:{h:['日期','站點','發電量(kWh)','效率(%)','收益(NT$)','PR值(%)'],r:[['2026-05-10','台南永康','2,341','94.2','3,276','85.4'],['2026-05-10','高雄大寮','1,920','95.1','2,698','86.2'],['2026-05-10','屏東枋寮','1,340','78.3','1,752','71.5'],['2026-05-10','台中工業','2,820','96.0','4,027','87.1'],['2026-05-10','雲林麥寮','1,580','91.0','2,294','83.8']]},
+  monthly:{h:['月份','總電量(MWh)','最高單日','最低單日','均效率(%)','月收益(NT$)'],r:[['2026-04','342.8','13,240','8,120','93.4','480,920'],['2026-03','318.4','12,680','7,440','92.1','446,760'],['2026-02','275.6','11,320','6,820','91.8','386,840'],['2026-01','289.1','11,890','7,120','92.3','405,740']]},
+  inv:{h:['設備','站點','運行(h)','發電(kWh)','效率(%)','告警次'],r:[['INV-01','台南永康','2,190','18,420','96.2','0'],['INV-02','台南永康','2,188','17,980','95.8','1'],['INV-03','台南永康','2,100','16,340','82.1','3'],['INV-04','台南永康','2,192','19,120','96.5','0']]},
+  carbon:{h:['期間','站點','發電(kWh)','減碳(噸)','植樹(棵)'],r:[['2026-05','台南永康','2,341','1.17','5.8'],['2026-05','高雄大寮','1,920','0.96','4.8'],['2026-05','屏東枋寮','1,340','0.67','3.3'],['2026-05','台中工業','2,820','1.41','7.0'],['2026-05','合計','9,941','4.97','24.8']]}
+};
+let curRpt='daily';
+function selRpt(el,t){document.querySelectorAll('.rpt-opt').forEach(e=>e.classList.remove('sel'));el.classList.add('sel');curRpt=t;const lb={daily:'日報表',monthly:'月報表',inv:'設備報表',carbon:'碳減排報表'};document.getElementById('rpt-label').textContent=lb[t];buildPreview(t)}
+function buildPreview(t){const cfg=RPT_DATA[t];document.getElementById('ptbl').innerHTML='<thead><tr>'+cfg.h.map(h=>`<th>${h}</th>`).join('')+'</tr></thead><tbody>'+cfg.r.map(r=>'<tr>'+r.map(c=>`<td>${c}</td>`).join('')+'</tr>').join('')+'</tbody>'}
+function dl(fmt){const msg=document.getElementById('dl-msg');msg.style.display='block';msg.style.color='var(--color-text-secondary)';msg.textContent=`正在產生 ${fmt} 報表...`;setTimeout(()=>{msg.style.color='var(--color-text-success)';msg.textContent=`報表已就緒`;},1100)}
+const ALERTS=[{t:'09:42',lv:'warn',msg:'INV-03 效率低於門檻值（82.1% < 90%）',dev:'INV-03'},{t:'08:05',lv:'err',msg:'彰化芳苑廠 通訊中斷，系統停機',dev:'S5全站'},{t:'07:18',lv:'info',msg:'系統今日發電啟動，各站點上線',dev:'全站'},{t:'昨 18:05',lv:'ok',msg:'INV-01 通訊恢復正常',dev:'INV-01'},{t:'昨 16:32',lv:'err',msg:'INV-01 通訊中斷（持續23分鐘）',dev:'INV-01'},{t:'昨 09:15',lv:'warn',msg:'屏東枋寮板溫過高告警（63°C > 60°C）',dev:'組串A3'}];
+function buildAlerts(){
+  const c=document.getElementById('alert-list');c.innerHTML='';
+  const ic={warn:'ti-alert-triangle',err:'ti-circle-x',ok:'ti-circle-check',info:'ti-info-circle'};
+  const cv={warn:'warning',err:'danger',ok:'success',info:'info'};
+  ALERTS.forEach(a=>{const d=document.createElement('div');d.className='alrow';d.innerHTML=`<i class="ti ${ic[a.lv]}" aria-hidden="true" style="font-size:16px;margin-top:1px;color:var(--color-text-${cv[a.lv]})"></i><div style="flex:1"><div style="font-size:12px">${a.msg}</div><div style="font-size:11px;color:var(--color-text-secondary);margin-top:2px">${a.t} · ${a.dev}</div></div>`;c.appendChild(d)});
+}
+setInterval(()=>{
+  const j=(Math.random()-.5)*20;
+  document.getElementById('kv-pwr').innerHTML=(2093+Math.round(j))+' <span class="ku">kW</span>';
+  document.getElementById('kv-eff').innerHTML=(91.8+(Math.random()-.5)*.5).toFixed(1)+'<span class="ku">%</span>';
+  drawGauge(85.4+(Math.random()-.5)*.8);
+},3000);
+setInterval(()=>{document.getElementById('clk').textContent='更新：'+new Date().toLocaleTimeString('zh-TW')},1000);
+</script>
+</body>
+</html>
