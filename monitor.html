@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>溫室環境監控 — 易歐特科技有限公司</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#1a2d4e;--accent:#3a82c4;--accent-light:#5a9fd4;
+  --green:#3B6D11;--green-light:#EAF3DE;--green-mid:#97C459;
+  --teal:#0F6E56;--teal-light:#E1F5EE;
+  --amber:#854F0B;--amber-light:#FAEEDA;
+  --red:#A32D2D;--red-light:#FCEBEB;
+  --text:#1a2332;--text-mid:#3a4a5c;--text-muted:#7a8fa8;
+  --border:rgba(26,45,78,0.08);--bg:#f5f8fc;--white:#fff;
+}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.6}
+
+/* ── Nav ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(26,45,78,0.97);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,0.08);padding:0 5%;display:flex;align-items:center;justify-content:space-between;height:56px}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.nav-logo span{color:white;font-size:13px}
+.nav-logo strong{color:rgba(255,255,255,0.5);font-size:11px;font-weight:300;margin-left:6px}
+.nav-back{color:rgba(255,255,255,0.65);font-size:12px;text-decoration:none;display:flex;align-items:center;gap:5px;transition:color .2s}
+.nav-back:hover{color:white}
+.badge-live{font-size:11px;padding:3px 10px;border-radius:99px;background:rgba(59,109,17,.25);color:#97C459;border:.5px solid #97C459;display:flex;align-items:center;gap:5px}
+.dot{width:6px;height:6px;border-radius:50%;background:#97C459;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* ── Layout ── */
+.dash{padding:72px 5% 2rem;max-width:1200px;margin:0 auto}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;flex-wrap:wrap;gap:10px}
+.topbar-title{font-size:18px;font-weight:500;color:var(--navy)}
+.topbar-right{font-size:12px;color:var(--text-muted)}
+
+.zone-tabs{display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap}
+.zone-tab{font-size:12px;padding:5px 14px;border-radius:6px;border:.5px solid var(--border);background:var(--white);color:var(--text-muted);cursor:pointer;transition:all .15s}
+.zone-tab.active{background:var(--green-light);color:var(--green);border-color:var(--green-mid)}
+
+.nav-tabs{display:flex;gap:0;margin-bottom:1rem;border-bottom:1px solid var(--border)}
+.nav-tab{font-size:13px;padding:7px 16px;cursor:pointer;color:var(--text-muted);border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap}
+.nav-tab.active{color:var(--green);border-bottom-color:var(--green);font-weight:500}
+.panel{display:none}.panel.active{display:block}
+
+/* ── Metric cards ── */
+.metrics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:1rem}
+.metric-card{background:var(--white);border-radius:8px;padding:.85rem 1rem;border:.5px solid var(--border)}
+.metric-label{font-size:11px;color:var(--text-muted);margin-bottom:6px;display:flex;align-items:center;gap:5px}
+.metric-value{font-size:24px;font-weight:500;color:var(--navy);line-height:1}
+.metric-unit{font-size:11px;color:var(--text-muted);margin-top:4px}
+.metric-bar{height:3px;border-radius:2px;background:rgba(26,45,78,0.08);margin-top:8px;overflow:hidden}
+.metric-fill{height:100%;border-radius:2px}
+.s-ok{background:var(--green-mid)}.s-warn{background:#EF9F27}.s-danger{background:#F09595}
+
+/* ── Chart cards ── */
+.charts-row{display:grid;grid-template-columns:2fr 1fr;gap:10px;margin-bottom:1rem}
+.chart-card{background:var(--white);border:.5px solid var(--border);border-radius:10px;padding:1rem 1.25rem}
+.chart-title{font-size:13px;font-weight:500;color:var(--navy);margin-bottom:12px}
+@media(max-width:640px){.charts-row{grid-template-columns:1fr}}
+
+/* ── Irrigation ── */
+.irrigation-list{display:flex;flex-direction:column;gap:8px}
+.irrigation-item{display:flex;align-items:center;justify-content:space-between;font-size:13px}
+.irr-label{color:var(--text-muted)}
+.irr-switch{display:flex;align-items:center;gap:6px}
+.sw{width:32px;height:18px;border-radius:99px;cursor:pointer;transition:background .2s;display:flex;align-items:center;padding:2px;border:.5px solid var(--border)}
+.sw.on{background:var(--green);border-color:var(--green)}.sw.off{background:#eee}
+.sw-thumb{width:14px;height:14px;border-radius:50%;background:white;transition:transform .2s}
+.sw.on .sw-thumb{transform:translateX(14px)}
+.irr-status{font-size:11px}.irr-on{color:var(--green)}.irr-off{color:var(--text-muted)}
+
+/* ── Alerts ── */
+.alerts-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:640px){.alerts-row{grid-template-columns:1fr}}
+.alert-card{background:var(--white);border:.5px solid var(--border);border-radius:10px;padding:1rem 1.25rem}
+.alert-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:.5px solid var(--border);font-size:13px}
+.alert-item:last-child{border-bottom:none}
+.alert-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.alert-text{color:var(--text);flex:1}.alert-time{color:var(--text-muted);font-size:11px}
+.a-ok .alert-dot{background:var(--green)}.a-warn .alert-dot{background:var(--amber)}.a-danger .alert-dot{background:var(--red)}
+
+/* ── Stats ── */
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stat-box{border-radius:8px;padding:10px 12px}
+
+/* ── History ── */
+.hist-controls{display:flex;align-items:center;gap:10px;margin-bottom:1rem;flex-wrap:wrap}
+.hist-controls label{font-size:13px;color:var(--text-muted)}
+.hist-controls select{font-size:13px;padding:5px 10px;border-radius:6px;border:.5px solid var(--border);background:var(--white);color:var(--text)}
+.hist-stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:1rem}
+@media(max-width:500px){.hist-stat-row{grid-template-columns:1fr 1fr}}
+.hist-stat{background:var(--white);border:.5px solid var(--border);border-radius:8px;padding:.65rem .9rem}
+.hist-stat-label{font-size:11px;color:var(--text-muted);margin-bottom:3px}
+.hist-stat-val{font-size:17px;font-weight:500;color:var(--navy)}
+.hw{background:var(--white);border:.5px solid var(--border);border-radius:10px;padding:1rem 1.25rem;margin-bottom:1rem}
+.legend{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:10px;font-size:12px;color:var(--text-muted)}
+.legend-item{display:flex;align-items:center;gap:5px}
+.legend-swatch{width:10px;height:10px;border-radius:2px}
+.btn-csv{font-size:12px;padding:5px 12px;border-radius:6px;border:.5px solid var(--border);background:var(--white);color:var(--text);cursor:pointer;display:flex;align-items:center;gap:5px;transition:background .15s}
+.btn-csv:hover{background:var(--bg)}
+
+/* ── AI ── */
+.ai-controls{display:flex;align-items:center;gap:10px;margin-bottom:1rem;flex-wrap:wrap}
+.ai-controls select{font-size:13px;padding:5px 10px;border-radius:6px;border:.5px solid var(--border);background:var(--white);color:var(--text)}
+.ai-controls label{font-size:13px;color:var(--text-muted)}
+.btn-ai{font-size:13px;padding:6px 16px;border-radius:6px;border:.5px solid var(--green-mid);background:var(--green-light);color:var(--green);cursor:pointer;display:flex;align-items:center;gap:6px;transition:background .15s}
+.btn-ai:hover{background:#d6ecbf}.btn-ai:disabled{opacity:.5;cursor:not-allowed}
+.ai-result{background:var(--white);border:.5px solid var(--border);border-radius:10px;padding:1.25rem;min-height:120px}
+.ai-loading{display:flex;align-items:center;gap:8px;color:var(--text-muted);font-size:13px}
+.ai-spinner{width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ai-section{margin-bottom:1rem}
+.ai-section-title{font-size:11px;font-weight:500;color:var(--green);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
+.ai-section p{font-size:13px;color:var(--text);line-height:1.7}
+.ai-tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:99px;margin-right:4px;margin-bottom:4px}
+.ai-tag-ok{background:var(--green-light);color:var(--green)}.ai-tag-warn{background:var(--amber-light);color:var(--amber)}.ai-tag-bad{background:var(--red-light);color:var(--red)}
+.ai-placeholder{color:var(--text-muted);font-size:13px;line-height:1.7}
+
+/* ── Threshold ── */
+.thresh-intro{font-size:13px;color:var(--text-muted);margin-bottom:1rem;line-height:1.6}
+.thresh-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:12px;margin-bottom:1rem}
+.thresh-card{background:var(--white);border:.5px solid var(--border);border-radius:10px;padding:1rem 1.25rem}
+.thresh-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.thresh-card-title{font-size:13px;font-weight:500;color:var(--navy);display:flex;align-items:center;gap:6px}
+.thresh-badge{font-size:11px;padding:2px 8px;border-radius:99px}
+.thresh-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:13px}
+.thresh-row label{color:var(--text-muted);width:36px;flex-shrink:0}
+.thresh-row input[type=number]{width:80px;padding:4px 8px;border-radius:6px;border:.5px solid var(--border);background:var(--white);color:var(--text);font-size:13px}
+.thresh-unit{color:var(--text-muted);font-size:12px}
+.btn-save{font-size:12px;padding:6px 14px;border-radius:6px;border:.5px solid var(--green-mid);background:var(--green-light);color:var(--green);cursor:pointer;transition:background .15s}
+.btn-save:hover{background:#d6ecbf}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--green);color:white;font-size:13px;padding:8px 18px;border-radius:8px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999}
+.toast.show{opacity:1}
+
+/* ── Footer ── */
+footer{margin-top:2rem;padding:1rem 5%;text-align:center;font-size:12px;color:var(--text-muted);border-top:.5px solid var(--border)}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">
+    <svg width="32" height="32" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="28" cy="28" r="25" fill="none" stroke="#3a7bc8" stroke-width="1.6"/>
+      <circle cx="28" cy="28" r="17" fill="#1e3a62"/>
+      <text x="28" y="32" text-anchor="middle" fill="#7aafd4" font-size="9.5" font-family="Arial" font-weight="400" letter-spacing="1">ema</text>
+      <circle cx="46" cy="9" r="5" fill="#00d4ff"/>
+    </svg>
+    <span>易歐特科技有限公司<strong>溫室環境監控系統</strong></span>
+  </div>
+  <div style="display:flex;align-items:center;gap:14px">
+    <div class="badge-live"><span class="dot"></span>即時連線</div>
+    <a href="index.html" class="nav-back"><i class="ti ti-arrow-left" style="font-size:14px"></i>回官網</a>
+  </div>
+</nav>
+
+<div class="dash">
+  <div class="topbar">
+    <div class="topbar-title">溫室環境監控儀表板</div>
+    <div class="topbar-right" id="clock">--:--:--</div>
+  </div>
+
+  <div class="zone-tabs">
+    <div class="zone-tab active">A區 — 番茄</div>
+    <div class="zone-tab">B區 — 葉菜</div>
+    <div class="zone-tab">C區 — 育苗</div>
+  </div>
+
+  <div class="nav-tabs">
+    <div class="nav-tab active" data-panel="live">即時監控</div>
+    <div class="nav-tab" data-panel="history">歷史查詢</div>
+    <div class="nav-tab" data-panel="ai">AI 分析</div>
+    <div class="nav-tab" data-panel="thresh">閾值設定</div>
+  </div>
+
+  <!-- 即時面板 -->
+  <div class="panel active" id="panel-live">
+    <div class="metrics-grid">
+      <div class="metric-card"><div class="metric-label"><i class="ti ti-temperature" style="font-size:14px"></i>氣溫</div><div class="metric-value" id="temp">27.4</div><div class="metric-unit">°C 目標 25–30</div><div class="metric-bar"><div class="metric-fill s-ok" style="width:62%"></div></div></div>
+      <div class="metric-card"><div class="metric-label"><i class="ti ti-droplet" style="font-size:14px"></i>濕度</div><div class="metric-value" id="hum">68</div><div class="metric-unit">% 目標 60–75</div><div class="metric-bar"><div class="metric-fill s-ok" style="width:68%"></div></div></div>
+      <div class="metric-card"><div class="metric-label"><i class="ti ti-cloud" style="font-size:14px"></i>CO₂</div><div class="metric-value" id="co2">842</div><div class="metric-unit">ppm 目標 800–1200</div><div class="metric-bar"><div class="metric-fill s-ok" style="width:42%"></div></div></div>
+      <div class="metric-card"><div class="metric-label"><i class="ti ti-sun" style="font-size:14px"></i>光照</div><div class="metric-value" id="lux">3.2</div><div class="metric-unit">klux 目標 2.5–5</div><div class="metric-bar"><div class="metric-fill s-ok" style="width:50%"></div></div></div>
+      <div class="metric-card"><div class="metric-label"><i class="ti ti-plant" style="font-size:14px"></i>土壤水分</div><div class="metric-value" id="soil">41</div><div class="metric-unit">% 目標 35–55</div><div class="metric-bar"><div class="metric-fill s-ok" style="width:41%"></div></div></div>
+      <div class="metric-card"><div class="metric-label"><i class="ti ti-test-pipe" style="font-size:14px"></i>EC 值</div><div class="metric-value" id="ec">2.1</div><div class="metric-unit">mS/cm 目標 1.5–2.5</div><div class="metric-bar"><div class="metric-fill s-ok" style="width:55%"></div></div></div>
+      <div class="metric-card"><div class="metric-label"><i class="ti ti-flask" style="font-size:14px"></i>pH 值</div><div class="metric-value" id="ph">6.4</div><div class="metric-unit">目標 6.0–7.0</div><div class="metric-bar"><div class="metric-fill s-ok" style="width:60%"></div></div></div>
+      <div class="metric-card"><div class="metric-label"><i class="ti ti-thermometer" style="font-size:14px"></i>土壤溫度</div><div class="metric-value" id="soiltemp">22.1</div><div class="metric-unit">°C 目標 18–26</div><div class="metric-bar"><div class="metric-fill s-ok" style="width:58%"></div></div></div>
+    </div>
+    <div class="charts-row">
+      <div class="chart-card">
+        <div class="chart-title">過去 24 小時趨勢</div>
+        <div style="position:relative;height:180px"><canvas id="trendChart" role="img" aria-label="過去24小時溫度與濕度趨勢">趨勢圖。</canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">灌溉控制</div>
+        <div class="irrigation-list">
+          <div class="irrigation-item"><span class="irr-label">主幹線</span><div class="irr-switch"><div class="sw on" onclick="toggleSw(this)"><div class="sw-thumb"></div></div><span class="irr-status irr-on">開啟</span></div></div>
+          <div class="irrigation-item"><span class="irr-label">霧化噴灑</span><div class="irr-switch"><div class="sw on" onclick="toggleSw(this)"><div class="sw-thumb"></div></div><span class="irr-status irr-on">開啟</span></div></div>
+          <div class="irrigation-item"><span class="irr-label">滴灌 A</span><div class="irr-switch"><div class="sw off" onclick="toggleSw(this)"><div class="sw-thumb"></div></div><span class="irr-status irr-off">關閉</span></div></div>
+          <div class="irrigation-item"><span class="irr-label">排水泵</span><div class="irr-switch"><div class="sw off" onclick="toggleSw(this)"><div class="sw-thumb"></div></div><span class="irr-status irr-off">關閉</span></div></div>
+          <div class="irrigation-item"><span class="irr-label">肥料注入</span><div class="irr-switch"><div class="sw on" onclick="toggleSw(this)"><div class="sw-thumb"></div></div><span class="irr-status irr-on">開啟</span></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="alerts-row">
+      <div class="alert-card">
+        <div class="chart-title">系統警報</div>
+        <div class="alert-item a-ok"><div class="alert-dot"></div><div class="alert-text">溫度在正常範圍內</div><div class="alert-time">剛才</div></div>
+        <div class="alert-item a-warn"><div class="alert-dot"></div><div class="alert-text">B區 CO₂ 濃度偏低 (680 ppm)</div><div class="alert-time">3 分鐘前</div></div>
+        <div class="alert-item a-ok"><div class="alert-dot"></div><div class="alert-text">pH 值穩定 (6.4)</div><div class="alert-time">12 分鐘前</div></div>
+        <div class="alert-item a-danger"><div class="alert-dot"></div><div class="alert-text">C區 光照感測器離線</div><div class="alert-time">42 分鐘前</div></div>
+      </div>
+      <div class="alert-card">
+        <div class="chart-title">今日統計</div>
+        <div class="stat-grid">
+          <div class="stat-box" style="background:var(--green-light)"><div style="font-size:11px;color:var(--green);margin-bottom:4px">今日灌溉量</div><div style="font-size:20px;font-weight:500;color:var(--green)">124 <span style="font-size:11px">L</span></div></div>
+          <div class="stat-box" style="background:var(--teal-light)"><div style="font-size:11px;color:var(--teal);margin-bottom:4px">平均 pH</div><div style="font-size:20px;font-weight:500;color:var(--teal)">6.4</div></div>
+          <div class="stat-box" style="background:#E6F1FB"><div style="font-size:11px;color:#185FA5;margin-bottom:4px">日照累積</div><div style="font-size:20px;font-weight:500;color:#185FA5">8.4 <span style="font-size:11px">h</span></div></div>
+          <div class="stat-box" style="background:var(--amber-light)"><div style="font-size:11px;color:var(--amber);margin-bottom:4px">警報次數</div><div style="font-size:20px;font-weight:500;color:var(--amber)">2</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 歷史查詢 -->
+  <div class="panel" id="panel-history">
+    <div class="hist-controls">
+      <label>感測器</label>
+      <select id="hist-sensor" onchange="renderHistory()">
+        <option value="temp">氣溫 (°C)</option>
+        <option value="hum">濕度 (%)</option>
+        <option value="co2">CO₂ (ppm)</option>
+        <option value="lux">光照 (klux)</option>
+        <option value="soil">土壤水分 (%)</option>
+        <option value="ec">EC 值 (mS/cm)</option>
+        <option value="ph">pH 值</option>
+        <option value="soiltemp">土壤溫度 (°C)</option>
+      </select>
+      <label>區域</label>
+      <select id="hist-zone" onchange="renderHistory()">
+        <option value="A">A區</option><option value="B">B區</option><option value="C">C區</option>
+      </select>
+      <label>範圍</label>
+      <select id="hist-range" onchange="renderHistory()">
+        <option value="7">過去 7 天</option><option value="30" selected>過去 30 天</option>
+      </select>
+      <button class="btn-csv" onclick="exportCSV()"><i class="ti ti-download" style="font-size:13px"></i>匯出 CSV</button>
+    </div>
+    <div class="hist-stat-row">
+      <div class="hist-stat"><div class="hist-stat-label">平均值</div><div class="hist-stat-val" id="h-avg">—</div></div>
+      <div class="hist-stat"><div class="hist-stat-label">最大值</div><div class="hist-stat-val" id="h-max">—</div></div>
+      <div class="hist-stat"><div class="hist-stat-label">最小值</div><div class="hist-stat-val" id="h-min">—</div></div>
+      <div class="hist-stat"><div class="hist-stat-label">超標天數</div><div class="hist-stat-val" id="h-exc">—</div></div>
+    </div>
+    <div class="hw">
+      <div class="legend" id="hist-legend"></div>
+      <div style="position:relative;height:200px"><canvas id="histChart" role="img" aria-label="歷史趨勢">歷史數據。</canvas></div>
+    </div>
+    <div class="hw">
+      <div class="chart-title" style="margin-bottom:10px">每日最高 / 最低</div>
+      <div style="position:relative;height:160px"><canvas id="histBarChart" role="img" aria-label="每日高低值">高低值。</canvas></div>
+    </div>
+  </div>
+
+  <!-- AI 分析 -->
+  <div class="panel" id="panel-ai">
+    <div class="ai-controls">
+      <label>區域</label>
+      <select id="ai-zone"><option value="A">A區 — 番茄</option><option value="B">B區 — 葉菜</option><option value="C">C區 — 育苗</option></select>
+      <label>分析重點</label>
+      <select id="ai-focus">
+        <option value="overall">整體環境評估</option>
+        <option value="water">灌溉與水分管理</option>
+        <option value="nutrients">養分與 EC/pH</option>
+        <option value="climate">溫濕度與 CO₂</option>
+        <option value="yield">產量優化建議</option>
+      </select>
+      <button class="btn-ai" id="ai-btn" onclick="runAI()"><i class="ti ti-sparkles" style="font-size:14px"></i>產生 AI 分析</button>
+    </div>
+    <div class="ai-result" id="ai-result">
+      <div class="ai-placeholder">選擇區域與分析重點後，點擊「產生 AI 分析」，AI 將根據感測器數據給出種植優化建議。</div>
+    </div>
+  </div>
+
+  <!-- 閾值設定 -->
+  <div class="panel" id="panel-thresh">
+    <p class="thresh-intro">為每個感測器設定警報上下限，超出範圍時系統將觸發警報通知。</p>
+    <div class="thresh-grid" id="thresh-grid"></div>
+    <button class="btn-save" onclick="saveThresholds()"><i class="ti ti-device-floppy" style="font-size:13px;vertical-align:-2px;margin-right:4px"></i>儲存設定</button>
+  </div>
+</div>
+
+<footer>© 2026 易歐特科技有限公司　|　溫室環境雲端監控系統</footer>
+<div class="toast" id="toast">✓ 閾值設定已儲存</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+function toggleSw(el){const on=el.classList.contains('on');el.classList.toggle('on',!on);el.classList.toggle('off',on);const s=el.nextElementSibling;s.textContent=on?'關閉':'開啟';s.className='irr-status '+(on?'irr-off':'irr-on')}
+function updateClock(){document.getElementById('clock').textContent=new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit',second:'2-digit'})}
+setInterval(updateClock,1000);updateClock();
+document.querySelectorAll('.zone-tab').forEach(t=>t.addEventListener('click',()=>{document.querySelectorAll('.zone-tab').forEach(x=>x.classList.remove('active'));t.classList.add('active')}));
+document.querySelectorAll('.nav-tab').forEach(t=>t.addEventListener('click',()=>{
+  document.querySelectorAll('.nav-tab').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));
+  t.classList.add('active');
+  const p=document.getElementById('panel-'+t.dataset.panel);p.classList.add('active');
+  if(t.dataset.panel==='history')renderHistory();
+  if(t.dataset.panel==='thresh')renderThresh();
+}));
+const sensors={temp:{el:'temp',base:27.4,d:1},hum:{el:'hum',base:68,d:0},co2:{el:'co2',base:842,d:0},lux:{el:'lux',base:3.2,d:1},soil:{el:'soil',base:41,d:0},ec:{el:'ec',base:2.1,d:1},ph:{el:'ph',base:6.4,d:1},soiltemp:{el:'soiltemp',base:22.1,d:1}};
+setInterval(()=>{Object.values(sensors).forEach(s=>{const v=s.base+(Math.random()-.5)*(s.d?0.4:5);document.getElementById(s.el).textContent=v.toFixed(s.d)})},3000);
+const gridC='rgba(0,0,0,0.05)';const textC='#7a8fa8';
+const hours=Array.from({length:25},(_,i)=>((new Date().getHours()-24+i+24)%24)+':00');
+new Chart(document.getElementById('trendChart'),{type:'line',data:{labels:hours,datasets:[
+  {label:'氣溫',data:Array.from({length:25},(_,i)=>+(24+Math.sin(i/4)*3+Math.random()).toFixed(1)),borderColor:'#3B6D11',backgroundColor:'rgba(59,109,17,.07)',tension:.4,fill:true,pointRadius:0,borderWidth:1.5,yAxisID:'y'},
+  {label:'濕度',data:Array.from({length:25},(_,i)=>Math.round(62+Math.sin(i/3+1)*8+Math.random()*2)),borderColor:'#0F6E56',backgroundColor:'rgba(15,110,86,.05)',tension:.4,fill:true,pointRadius:0,borderWidth:1.5,borderDash:[4,3],yAxisID:'y2'}
+]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:textC,font:{size:10},maxTicksLimit:6},grid:{color:gridC}},y:{position:'left',min:20,max:35,ticks:{color:textC,font:{size:10},callback:v=>v+'°'},grid:{color:gridC}},y2:{position:'right',min:40,max:90,ticks:{color:textC,font:{size:10},callback:v=>v+'%'},grid:{display:false}}}}});
+const sensorCfg={temp:{label:'氣溫',unit:'°C',base:26,amp:3,min:25,max:30,icon:'ti-temperature'},hum:{label:'濕度',unit:'%',base:67,amp:8,min:60,max:75,icon:'ti-droplet'},co2:{label:'CO₂',unit:'ppm',base:900,amp:120,min:800,max:1200,icon:'ti-cloud'},lux:{label:'光照',unit:'klux',base:3.5,amp:1.2,min:2.5,max:5,icon:'ti-sun'},soil:{label:'土壤水分',unit:'%',base:44,amp:7,min:35,max:55,icon:'ti-plant'},ec:{label:'EC 值',unit:'mS/cm',base:2.0,amp:0.4,min:1.5,max:2.5,icon:'ti-test-pipe'},ph:{label:'pH 值',unit:'',base:6.5,amp:0.5,min:6.0,max:7.0,icon:'ti-flask'},soiltemp:{label:'土壤溫度',unit:'°C',base:22,amp:3,min:18,max:26,icon:'ti-thermometer'}};
+const thresholds={};Object.entries(sensorCfg).forEach(([k,v])=>{thresholds[k]={min:v.min,max:v.max}});
+function genHistory(key,days,zone){const c=sensorCfg[key];const zo={A:0,B:c.amp*.3,C:-c.amp*.2}[zone]||0;return Array.from({length:days},(_,i)=>+(c.base+zo+Math.sin(i/days*Math.PI*2)*c.amp*.4+(Math.random()-.5)*c.amp*.6).toFixed(key==='co2'||key==='hum'||key==='soil'?0:1))}
+function getLabels(days){return Array.from({length:days},(_,i)=>{const d=new Date();d.setDate(d.getDate()-days+1+i);return(d.getMonth()+1)+'/'+(d.getDate())})}
+let hLine=null,hBar=null,_histData=[];
+function renderHistory(){
+  const key=document.getElementById('hist-sensor').value;
+  const zone=document.getElementById('hist-zone').value;
+  const days=parseInt(document.getElementById('hist-range').value);
+  const labels=getLabels(days);const data=genHistory(key,days,zone);
+  _histData={key,zone,days,labels,data};
+  const c=sensorCfg[key];const th=thresholds[key];
+  const avg=(data.reduce((a,b)=>a+b,0)/data.length).toFixed(1);
+  const mx=Math.max(...data).toFixed(1);const mn=Math.min(...data).toFixed(1);
+  const exc=data.filter(v=>v<th.min||v>th.max).length;
+  document.getElementById('h-avg').textContent=avg+(c.unit?' '+c.unit:'');
+  document.getElementById('h-max').textContent=mx+(c.unit?' '+c.unit:'');
+  document.getElementById('h-min').textContent=mn+(c.unit?' '+c.unit:'');
+  document.getElementById('h-exc').textContent=exc+' 天';
+  document.getElementById('hist-legend').innerHTML=`<div class="legend-item"><div class="legend-swatch" style="background:#3B6D11"></div>${c.label}</div><div class="legend-item"><div class="legend-swatch" style="background:#EF9F27;opacity:.6"></div>警報閾值</div>`;
+  if(hLine)hLine.destroy();
+  hLine=new Chart(document.getElementById('histChart'),{type:'line',data:{labels,datasets:[
+    {label:c.label,data,borderColor:'#3B6D11',backgroundColor:'rgba(59,109,17,.06)',tension:.3,fill:true,pointRadius:2,pointBackgroundColor:'#3B6D11',borderWidth:1.5},
+    {label:'上限',data:Array(days).fill(th.max),borderColor:'rgba(239,159,39,.5)',borderDash:[5,4],pointRadius:0,borderWidth:1,fill:false},
+    {label:'下限',data:Array(days).fill(th.min),borderColor:'rgba(59,109,17,.3)',borderDash:[5,4],pointRadius:0,borderWidth:1,fill:false}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:textC,font:{size:10},maxTicksLimit:10,autoSkip:true},grid:{color:gridC}},y:{ticks:{color:textC,font:{size:10}},grid:{color:gridC}}}}});
+  const maxArr=data.map(v=>+(v+Math.random()*sensorCfg[key].amp*.2).toFixed(1));
+  const minArr=data.map(v=>+(v-Math.random()*sensorCfg[key].amp*.2).toFixed(1));
+  if(hBar)hBar.destroy();
+  hBar=new Chart(document.getElementById('histBarChart'),{type:'bar',data:{labels,datasets:[
+    {label:'最高',data:maxArr,backgroundColor:'rgba(59,109,17,.7)',borderRadius:2},
+    {label:'最低',data:minArr,backgroundColor:'rgba(15,110,86,.4)',borderRadius:2}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:textC,font:{size:10},maxTicksLimit:10,autoSkip:true},grid:{display:false}},y:{ticks:{color:textC,font:{size:10}},grid:{color:gridC}}}}});
+}
+function exportCSV(){
+  if(!_histData||!_histData.labels){alert('請先載入歷史數據');return}
+  const{key,zone,labels,data}=_histData;const c=sensorCfg[key];
+  const rows=[['易歐特科技有限公司 — 溫室環境監控數據'],['區域',zone,'感測器',c.label],['日期',`數值(${c.unit})`,'下限','上限']];
+  labels.forEach((l,i)=>rows.push([l,data[i],thresholds[key].min,thresholds[key].max]));
+  const csv=rows.map(r=>r.join(',')).join('\n');
+  const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;
+  a.download=`易歐特科技_${zone}_${c.label}_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();URL.revokeObjectURL(url);
+}
+async function runAI(){
+  const zone=document.getElementById('ai-zone').value;
+  const focus=document.getElementById('ai-focus').value;
+  const btn=document.getElementById('ai-btn');const result=document.getElementById('ai-result');
+  btn.disabled=true;result.innerHTML='<div class="ai-loading"><div class="ai-spinner"></div>AI 正在分析感測器數據...</div>';
+  const snap={};Object.entries(sensorCfg).forEach(([k,c])=>{const zo={A:0,B:c.amp*.3,C:-c.amp*.2}[zone]||0;const avg=(c.base+zo+((Math.random()-.5)*c.amp*.3)).toFixed(k==='co2'||k==='hum'||k==='soil'?0:1);snap[k]={label:c.label,unit:c.unit,value:avg,min:thresholds[k].min,max:thresholds[k].max}});
+  const focusMap={overall:'整體環境評估',water:'灌溉與水分管理',nutrients:'養分與 EC/pH 分析',climate:'溫濕度與 CO₂ 管理',yield:'產量優化建議'};
+  const zoneMap={A:'A區（番茄）',B:'B區（葉菜）',C:'C區（育苗）'};
+  const prompt=`你是易歐特科技有限公司的專業溫室農業環境分析師。以下是${zoneMap[zone]}過去30天的平均感測器數據：\n\n${Object.entries(snap).map(([k,v])=>`- ${v.label}：${v.value}${v.unit}（目標 ${v.min}–${v.max}${v.unit}）`).join('\n')}\n\n請針對「${focusMap[focus]}」進行分析，用繁體中文回答，格式如下：\n1. 【環境狀態評估】：用2-3句話整體評估\n2. 【主要問題】：列出1-3個需注意的問題\n3. 【優化建議】：給出2-3條具體建議\n4. 【預測風險】：說明若不處理的影響\n每點不超過2句話。`;
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})});
+    const d=await res.json();
+    const text=d.content?.filter(b=>b.type==='text').map(b=>b.text).join('')||'';
+    const tags=Object.entries(snap).map(([k,v])=>{const val=parseFloat(v.value);const ok=val>=v.min&&val<=v.max;return`<span class="ai-tag ${ok?'ai-tag-ok':'ai-tag-bad'}">${v.label} ${v.value}${v.unit}</span>`}).join('');
+    const sections=[{key:'環境狀態評估',icon:'ti-chart-line'},{key:'主要問題',icon:'ti-alert-triangle'},{key:'優化建議',icon:'ti-bulb'},{key:'預測風險',icon:'ti-shield-exclamation'}];
+    let html=`<div style="margin-bottom:1rem">${tags}</div>`;
+    sections.forEach(s=>{const re=new RegExp(`【${s.key}】[：:]?([\\s\\S]*?)(?=【|$)`);const m=text.match(re);if(m)html+=`<div class="ai-section"><div class="ai-section-title">${s.key}</div><p>${m[1].trim().replace(/\n/g,'<br>')}</p></div>`});
+    result.innerHTML=html||`<div class="ai-section"><p>${text.replace(/\n/g,'<br>')}</p></div>`;
+  }catch(e){result.innerHTML='<div class="ai-placeholder">分析服務暫時無法連線，請稍後再試。</div>'}
+  btn.disabled=false;
+}
+function renderThresh(){
+  const grid=document.getElementById('thresh-grid');grid.innerHTML='';
+  Object.entries(sensorCfg).forEach(([key,c])=>{
+    const th=thresholds[key];const ok=c.base>=th.min&&c.base<=th.max;
+    grid.innerHTML+=`<div class="thresh-card"><div class="thresh-card-header"><div class="thresh-card-title"><i class="ti ${c.icon}" style="font-size:14px;color:var(--green)"></i>${c.label}</div><span class="thresh-badge" style="background:${ok?'var(--green-light)':'var(--red-light)'};color:${ok?'var(--green)':'var(--red)'}">${ok?'正常':'異常'}</span></div><div class="thresh-row"><label>下限</label><input type="number" id="th-min-${key}" value="${th.min}" step="${key==='ph'||key==='ec'||key==='lux'?0.1:1}"><span class="thresh-unit">${c.unit}</span></div><div class="thresh-row"><label>上限</label><input type="number" id="th-max-${key}" value="${th.max}" step="${key==='ph'||key==='ec'||key==='lux'?0.1:1}"><span class="thresh-unit">${c.unit}</span></div></div>`;
+  });
+}
+function saveThresholds(){
+  Object.keys(sensorCfg).forEach(key=>{const mn=parseFloat(document.getElementById('th-min-'+key).value);const mx=parseFloat(document.getElementById('th-max-'+key).value);if(!isNaN(mn)&&!isNaN(mx)&&mn<mx)thresholds[key]={min:mn,max:mx}});
+  const t=document.getElementById('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);
+  if(document.getElementById('panel-history').classList.contains('active'))renderHistory();
+}
+</script>
+</body>
+</html>
