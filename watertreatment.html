@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>水處理系統監控 — 易歐特科技有限公司</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#1a2d4e;--accent:#3a82c4;--accent-light:#5a9fd4;
+  --font-sans:'Noto Sans TC',sans-serif;
+  --color-text-primary:#1a2332;--color-text-secondary:#3a4a5c;--color-text-tertiary:#7a8fa8;
+  --color-background-primary:#fff;--color-background-secondary:#f5f8fc;
+  --color-border-tertiary:rgba(26,45,78,0.08);
+  --color-background-success:#EAF3DE;--color-text-success:#3B6D11;
+  --color-background-warning:#FAEEDA;--color-text-warning:#854F0B;
+  --color-background-danger:#FCEBEB;--color-text-danger:#A32D2D;
+  --color-background-info:#E6F1FB;--color-text-info:#185FA5;
+  --border-radius-md:8px;--border-radius-lg:12px;
+}
+body{font-family:var(--font-sans);background:var(--color-background-secondary);color:var(--color-text-primary);font-size:14px;line-height:1.6}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(26,45,78,0.97);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,0.08);padding:0 5%;display:flex;align-items:center;justify-content:space-between;height:56px}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.nav-logo span{color:white;font-size:13px}
+.nav-logo strong{color:rgba(255,255,255,0.5);font-size:11px;font-weight:300;margin-left:6px}
+.nav-back{color:rgba(255,255,255,0.65);font-size:12px;text-decoration:none;display:flex;align-items:center;gap:5px;transition:color .2s}
+.nav-back:hover{color:white}
+.badge-live{font-size:11px;padding:3px 10px;border-radius:99px;background:rgba(29,158,117,.2);color:#1D9E75;border:.5px solid #1D9E75;display:flex;align-items:center;gap:5px}
+.dot{width:6px;height:6px;border-radius:50%;background:#1D9E75;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+
+.wrap{padding:72px 5% 2rem;max-width:1200px;margin:0 auto}
+
+footer{margin-top:2rem;padding:1rem 5%;text-align:center;font-size:12px;color:var(--color-text-tertiary);border-top:.5px solid var(--color-border-tertiary)}
+
+/* ── Dashboard styles from original ── */
+.dash{padding:1rem 0;font-family:var(--font-sans)}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.topbar-left{display:flex;align-items:center;gap:10px}
+.company-bar{font-size:11px;color:var(--color-text-tertiary);margin-bottom:1rem;padding-bottom:8px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.status-dot{width:8px;height:8px;border-radius:50%;background:#3B6D11;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.nav2{display:flex;gap:4px;margin-bottom:1.25rem;border-bottom:0.5px solid var(--color-border-tertiary);padding-bottom:0}
+.nav-btn{font-size:13px;padding:7px 14px;border:none;background:transparent;color:var(--color-text-secondary);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-0.5px;border-radius:0;font-family:var(--font-sans)}
+.nav-btn.active{color:var(--color-text-primary);font-weight:500;border-bottom-color:var(--color-text-primary)}
+.nav-btn:hover:not(.active){color:var(--color-text-primary);background:var(--color-background-secondary)}
+.page{display:none}.page.active{display:block}
+.slabel{font-size:11px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:.06em;margin:1.25rem 0 10px}
+.slabel:first-child{margin-top:0}
+.mgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin-bottom:1.25rem}
+.mcard{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px}
+.mlabel{font-size:12px;color:var(--color-text-secondary);margin-bottom:6px;display:flex;align-items:center;gap:5px}
+.mval{font-size:20px;font-weight:500;color:var(--color-text-primary)}
+.munit{font-size:11px;color:var(--color-text-tertiary);margin-left:2px}
+.msub{font-size:11px;margin-top:3px}
+.ok{color:#3B6D11}.warn{color:#854F0B}.danger{color:#A32D2D}
+.trow{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:8px;margin-bottom:1.25rem}
+.tcard{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px}
+.tname{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.tbarbg{background:var(--color-background-secondary);border-radius:4px;height:10px;overflow:hidden}
+.tbarfill{height:100%;border-radius:4px}
+.tpct{font-size:12px;color:var(--color-text-secondary);margin-top:4px}
+.ccardw{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px;margin-bottom:1.25rem}
+.chdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.ctitle{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.cleg{display:flex;gap:12px}
+.legit{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--color-text-secondary)}
+.legdot{width:8px;height:8px;border-radius:50%}
+.alist{display:flex;flex-direction:column;gap:8px;margin-bottom:1.25rem}
+.aitem{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md)}
+.aicon{font-size:16px;margin-top:1px}
+.atxt{flex:1}
+.atitle{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.atime{font-size:11px;color:var(--color-text-tertiary);margin-top:2px}
+.sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-bottom:1.25rem}
+.scard{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:12px 14px}
+.shdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.sname{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.sparams{display:flex;flex-direction:column;gap:5px}
+.prow{display:flex;justify-content:space-between;font-size:12px}
+.pkey{color:var(--color-text-secondary)}.pval{font-weight:500}
+.badge{font-size:11px;padding:2px 8px;border-radius:var(--border-radius-md);white-space:nowrap}
+.bok{background:var(--color-background-success);color:var(--color-text-success)}
+.bwarn{background:var(--color-background-warning);color:var(--color-text-warning)}
+.bdanger{background:var(--color-background-danger);color:var(--color-text-danger)}
+.binfo{background:var(--color-background-info);color:var(--color-text-info)}
+.brow{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1rem}
+.brow button{font-size:12px;padding:5px 12px;border-radius:var(--border-radius-md);border:.5px solid var(--color-border-tertiary);background:var(--color-background-primary);color:var(--color-text-primary);cursor:pointer;transition:background .15s}
+.brow button:hover{background:var(--color-background-secondary)}
+.dgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(195px,1fr));gap:8px}
+.dcard{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px;display:flex;flex-direction:column;gap:10px}
+.dhd{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.dico{font-size:20px;color:var(--color-text-secondary);margin-top:1px}
+.dname{font-size:13px;font-weight:500;color:var(--color-text-primary);line-height:1.3}
+.dmodel{font-size:11px;color:var(--color-text-tertiary);margin-top:2px}
+.dparams{display:flex;flex-direction:column;gap:5px;border-top:0.5px solid var(--color-border-tertiary);padding-top:10px}
+.ptrow{display:flex;justify-content:space-between;gap:8px;font-size:12px}
+.ptk{color:var(--color-text-secondary)}.ptv{color:var(--color-text-primary);font-weight:500;text-align:right}
+.protos{display:flex;gap:5px;flex-wrap:wrap}
+.ptag{font-size:11px;padding:2px 7px;border-radius:var(--border-radius-md);background:var(--color-background-secondary);color:var(--color-text-secondary);border:0.5px solid var(--color-border-tertiary)}
+.dcard button{font-size:12px;padding:4px 10px;border-radius:var(--border-radius-md);border:.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);color:var(--color-text-primary);cursor:pointer}
+.sumgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-bottom:1.25rem}
+.sumcard{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:14px;display:flex;align-items:center;gap:10px}
+.sumico{font-size:22px;color:var(--color-text-secondary)}
+.sumlabel{font-size:12px;color:var(--color-text-secondary)}
+.sumval{font-size:18px;font-weight:500;color:var(--color-text-primary)}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">
+    <svg width="32" height="32" viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="28" cy="28" r="25" fill="none" stroke="#3a7bc8" stroke-width="1.6"/>
+      <circle cx="28" cy="28" r="17" fill="#1e3a62"/>
+      <text x="28" y="32" text-anchor="middle" fill="#7aafd4" font-size="9.5" font-family="Arial" font-weight="400" letter-spacing="1">ema</text>
+      <circle cx="46" cy="9" r="5" fill="#00d4ff"/>
+    </svg>
+    <span>易歐特科技有限公司<strong>水處理系統監控</strong></span>
+  </div>
+  <div style="display:flex;align-items:center;gap:14px">
+    <div class="badge-live"><span class="dot"></span>即時連線</div>
+    <a href="index.html" class="nav-back"><i class="ti ti-arrow-left" style="font-size:14px"></i>回官網</a>
+  </div>
+</nav>
+
+<div class="wrap">
+  <div class="dash">
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="status-dot"></div>
+        <span style="font-size:14px;font-weight:500;color:var(--color-text-primary)">水處理系統監控</span>
+        <span class="badge bok">● 即時連線</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:12px;color:var(--color-text-tertiary)" id="clock"></span>
+      </div>
+    </div>
+
+    <div class="company-bar">
+      <i class="ti ti-building" aria-hidden="true" style="font-size:12px;margin-right:4px"></i>易歐特科技有限公司
+    </div>
+
+    <div class="nav2">
+      <button class="nav-btn active" onclick="showPage('overview',this)"><i class="ti ti-dashboard" aria-hidden="true"></i> 總覽</button>
+      <button class="nav-btn" onclick="showPage('stations',this)"><i class="ti ti-map-pin" aria-hidden="true"></i> 站點</button>
+      <button class="nav-btn" onclick="showPage('alerts',this)"><i class="ti ti-bell" aria-hidden="true"></i> 警報 <span style="display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:var(--color-background-danger);color:var(--color-text-danger);font-size:10px;margin-left:4px">3</span></button>
+      <button class="nav-btn" onclick="showPage('hardware',this)"><i class="ti ti-cpu" aria-hidden="true"></i> 硬體設備</button>
+    </div>
+
+    <div id="page-overview" class="page active">
+      <div class="slabel">即時水質指標</div>
+      <div class="mgrid">
+        <div class="mcard"><div class="mlabel"><i class="ti ti-droplet" aria-hidden="true"></i> pH 值</div><div class="mval ok" id="ph">7.23</div><div class="msub ok">正常 6.5–8.5</div></div>
+        <div class="mcard"><div class="mlabel"><i class="ti ti-eye" aria-hidden="true"></i> 濁度</div><div class="mval warn" id="turb">3.8<span class="munit">NTU</span></div><div class="msub warn">輕微偏高</div></div>
+        <div class="mcard"><div class="mlabel"><i class="ti ti-bolt" aria-hidden="true"></i> 導電度</div><div class="mval ok" id="cond">412<span class="munit">μS</span></div><div class="msub ok">正常</div></div>
+        <div class="mcard"><div class="mlabel"><i class="ti ti-thermometer" aria-hidden="true"></i> 水溫</div><div class="mval ok" id="temp">24.1<span class="munit">°C</span></div><div class="msub ok">正常範圍</div></div>
+        <div class="mcard"><div class="mlabel"><i class="ti ti-atom" aria-hidden="true"></i> 餘氯</div><div class="mval ok" id="chlor">0.42<span class="munit">mg/L</span></div><div class="msub ok">標準以內</div></div>
+        <div class="mcard"><div class="mlabel"><i class="ti ti-air" aria-hidden="true"></i> 溶氧</div><div class="mval danger" id="dox">5.1<span class="munit">mg/L</span></div><div class="msub danger">低於警戒值</div></div>
+      </div>
+
+      <div class="slabel">處理槽液位</div>
+      <div class="trow">
+        <div class="tcard"><div class="tname"><i class="ti ti-square-rounded" aria-hidden="true"></i> 集水槽 A</div><div class="tbarbg"><div class="tbarfill" style="width:78%;background:#1D9E75"></div></div><div class="tpct">78% — <span class="ok">正常</span></div></div>
+        <div class="tcard"><div class="tname"><i class="ti ti-square-rounded" aria-hidden="true"></i> 沉澱槽 B</div><div class="tbarbg"><div class="tbarfill" style="width:91%;background:#BA7517"></div></div><div class="tpct">91% — <span class="warn">接近上限</span></div></div>
+        <div class="tcard"><div class="tname"><i class="ti ti-square-rounded" aria-hidden="true"></i> 過濾槽 C</div><div class="tbarbg"><div class="tbarfill" style="width:55%;background:#1D9E75"></div></div><div class="tpct">55% — <span class="ok">正常</span></div></div>
+        <div class="tcard"><div class="tname"><i class="ti ti-square-rounded" aria-hidden="true"></i> 清水槽 D</div><div class="tbarbg"><div class="tbarfill" style="width:34%;background:#E24B4A"></div></div><div class="tpct">34% — <span class="danger">液位偏低</span></div></div>
+      </div>
+
+      <div class="ccardw">
+        <div class="chdr">
+          <span class="ctitle">過去 24 小時 pH 趨勢</span>
+          <div class="cleg">
+            <div class="legit"><div class="legdot" style="background:#1D9E75"></div>pH 值</div>
+            <div class="legit"><div class="legdot" style="background:#E24B4A;opacity:.5"></div>警戒限</div>
+          </div>
+        </div>
+        <canvas id="phChart" height="110"></canvas>
+      </div>
+
+      <div class="brow">
+        <button>趨勢分析</button>
+        <button>維護計畫</button>
+        <button>法規查詢</button>
+      </div>
+    </div>
+
+    <div id="page-stations" class="page">
+      <div class="slabel">監測站點</div>
+      <div class="sgrid">
+        <div class="scard"><div class="shdr"><span class="sname">進水口</span><span class="badge bok">正常</span></div><div class="sparams"><div class="prow"><span class="pkey">流量</span><span class="pval ok">128 m³/h</span></div><div class="prow"><span class="pkey">pH</span><span class="pval ok">7.1</span></div><div class="prow"><span class="pkey">濁度</span><span class="pval ok">2.1 NTU</span></div></div></div>
+        <div class="scard"><div class="shdr"><span class="sname">化學投藥站</span><span class="badge bwarn">注意</span></div><div class="sparams"><div class="prow"><span class="pkey">加藥量</span><span class="pval warn">92%</span></div><div class="prow"><span class="pkey">藥劑餘量</span><span class="pval warn">偏低</span></div><div class="prow"><span class="pkey">投藥泵浦</span><span class="pval ok">運轉中</span></div></div></div>
+        <div class="scard"><div class="shdr"><span class="sname">過濾系統</span><span class="badge bok">正常</span></div><div class="sparams"><div class="prow"><span class="pkey">壓差</span><span class="pval ok">0.12 bar</span></div><div class="prow"><span class="pkey">濾速</span><span class="pval ok">8.4 m/h</span></div><div class="prow"><span class="pkey">反洗狀態</span><span class="pval ok">待機</span></div></div></div>
+        <div class="scard"><div class="shdr"><span class="sname">出水口</span><span class="badge bdanger">警報</span></div><div class="sparams"><div class="prow"><span class="pkey">溶氧</span><span class="pval danger">5.1 mg/L</span></div><div class="prow"><span class="pkey">餘氯</span><span class="pval ok">0.42</span></div><div class="prow"><span class="pkey">流量</span><span class="pval ok">119 m³/h</span></div></div></div>
+      </div>
+      <div class="brow"><button>出水口分析</button><button>沉澱槽建議</button></div>
+    </div>
+
+    <div id="page-alerts" class="page">
+      <div class="slabel">警報紀錄</div>
+      <div class="alist">
+        <div class="aitem" style="border-left:3px solid #E24B4A;border-radius:0 var(--border-radius-md) var(--border-radius-md) 0"><i class="ti ti-alert-triangle aicon danger"></i><div class="atxt"><div class="atitle">出水口溶氧偏低（5.1 mg/L，警戒值 6.0）</div><div class="atime">今日 09:42 — 待確認</div></div></div>
+        <div class="aitem" style="border-left:3px solid #BA7517;border-radius:0 var(--border-radius-md) var(--border-radius-md) 0"><i class="ti ti-alert-circle aicon warn"></i><div class="atxt"><div class="atitle">沉澱槽 B 液位達 91%，接近上限</div><div class="atime">今日 08:15 — 監控中</div></div></div>
+        <div class="aitem" style="border-left:3px solid #BA7517;border-radius:0 var(--border-radius-md) var(--border-radius-md) 0"><i class="ti ti-alert-circle aicon warn"></i><div class="atxt"><div class="atitle">化學投藥站藥劑餘量不足，需補充</div><div class="atime">今日 07:30 — 已通知操作員</div></div></div>
+        <div class="aitem"><i class="ti ti-check aicon ok"></i><div class="atxt"><div class="atitle">過濾系統反洗完成，恢復正常運轉</div><div class="atime">今日 06:00 — 已解除</div></div></div>
+      </div>
+      <div class="brow"><button>警報設定</button></div>
+    </div>
+
+    <div id="page-hardware" class="page">
+      <div class="sumgrid">
+        <div class="sumcard"><i class="ti ti-device-analytics sumico" aria-hidden="true"></i><div><div class="sumlabel">水質感測器</div><div class="sumval">4 台</div></div></div>
+        <div class="sumcard"><i class="ti ti-current-ac sumico" aria-hidden="true"></i><div><div class="sumlabel">流量液位設備</div><div class="sumval">3 台</div></div></div>
+        <div class="sumcard"><i class="ti ti-wifi sumico" aria-hidden="true"></i><div><div class="sumlabel">通訊邊緣設備</div><div class="sumval">3 台</div></div></div>
+        <div class="sumcard"><i class="ti ti-plug sumico" aria-hidden="true"></i><div><div class="sumlabel">電力保護設備</div><div class="sumval">2 台</div></div></div>
+      </div>
+
+      <div class="slabel">水質感測器</div>
+      <div class="dgrid">
+        <div class="dcard"><div class="dhd"><i class="ti ti-droplet dico" aria-hidden="true"></i><span class="badge bok">連線中</span></div><div><div class="dname">pH／ORP 複合感測器</div><div class="dmodel">Endress+Hauser CPS11D</div></div><div class="dparams"><div class="ptrow"><span class="ptk">量測範圍</span><span class="ptv">pH 0–14</span></div><div class="ptrow"><span class="ptk">精度</span><span class="ptv">±0.05 pH</span></div><div class="ptrow"><span class="ptk">輸出</span><span class="ptv">4–20 mA</span></div><div class="ptrow"><span class="ptk">防護</span><span class="ptv">IP68</span></div></div><div class="protos"><span class="ptag">Modbus RTU</span><span class="ptag">HART</span></div></div>
+        <div class="dcard"><div class="dhd"><i class="ti ti-eye dico" aria-hidden="true"></i><span class="badge bwarn">輕微偏高</span></div><div><div class="dname">在線濁度計</div><div class="dmodel">HACH TU5300sc</div></div><div class="dparams"><div class="ptrow"><span class="ptk">量測範圍</span><span class="ptv">0–4000 NTU</span></div><div class="ptrow"><span class="ptk">解析度</span><span class="ptv">0.001 NTU</span></div><div class="ptrow"><span class="ptk">原理</span><span class="ptv">90° 散射光</span></div><div class="ptrow"><span class="ptk">防護</span><span class="ptv">IP67</span></div></div><div class="protos"><span class="ptag">Modbus TCP</span><span class="ptag">SC 匯流排</span></div></div>
+        <div class="dcard"><div class="dhd"><i class="ti ti-atom dico" aria-hidden="true"></i><span class="badge bok">正常</span></div><div><div class="dname">溶氧／餘氯感測器</div><div class="dmodel">YSI Pro20i / HACH CL17sc</div></div><div class="dparams"><div class="ptrow"><span class="ptk">DO 範圍</span><span class="ptv">0–50 mg/L</span></div><div class="ptrow"><span class="ptk">Cl 範圍</span><span class="ptv">0–5 mg/L</span></div><div class="ptrow"><span class="ptk">原理</span><span class="ptv">光學螢光法</span></div><div class="ptrow"><span class="ptk">輸出</span><span class="ptv">RS-485</span></div></div><div class="protos"><span class="ptag">Modbus RTU</span><span class="ptag">SDI-12</span></div></div>
+        <div class="dcard"><div class="dhd"><i class="ti ti-bolt dico" aria-hidden="true"></i><span class="badge bok">正常</span></div><div><div class="dname">導電度／水溫感測器</div><div class="dmodel">Endress+Hauser CLS50D</div></div><div class="dparams"><div class="ptrow"><span class="ptk">導電度</span><span class="ptv">0.01–500 mS/cm</span></div><div class="ptrow"><span class="ptk">溫度範圍</span><span class="ptv">0–150 °C</span></div><div class="ptrow"><span class="ptk">輸出</span><span class="ptv">4–20 mA</span></div><div class="ptrow"><span class="ptk">防護</span><span class="ptv">IP68</span></div></div><div class="protos"><span class="ptag">HART 7</span><span class="ptag">Profibus PA</span></div></div>
+      </div>
+
+      <div class="slabel">通訊與邊緣運算</div>
+      <div class="dgrid">
+        <div class="dcard"><div class="dhd"><i class="ti ti-cpu dico" aria-hidden="true"></i><span class="badge bok">在線</span></div><div><div class="dname">現場 PLC / RTU</div><div class="dmodel">Siemens S7-1200 / ADAM-4000</div></div><div class="dparams"><div class="ptrow"><span class="ptk">AI 通道</span><span class="ptv">16 ch</span></div><div class="ptrow"><span class="ptk">DI/DO</span><span class="ptv">24 ch 各</span></div><div class="ptrow"><span class="ptk">掃描週期</span><span class="ptv">1 ms</span></div><div class="ptrow"><span class="ptk">工作溫度</span><span class="ptv">-20–60 °C</span></div></div><div class="protos"><span class="ptag">Modbus TCP</span><span class="ptag">OPC UA</span></div></div>
+        <div class="dcard"><div class="dhd"><i class="ti ti-wifi dico" aria-hidden="true"></i><span class="badge bok">連線中</span></div><div><div class="dname">工業無線閘道器</div><div class="dmodel">Moxa AWK-3252A</div></div><div class="dparams"><div class="ptrow"><span class="ptk">無線規格</span><span class="ptv">802.11a/b/g/n</span></div><div class="ptrow"><span class="ptk">有線埠</span><span class="ptv">2× Gigabit</span></div><div class="ptrow"><span class="ptk">工作溫度</span><span class="ptv">-40–75 °C</span></div><div class="ptrow"><span class="ptk">防護</span><span class="ptv">IP30</span></div></div><div class="protos"><span class="ptag">MQTT</span><span class="ptag">OPC UA</span></div></div>
+        <div class="dcard"><div class="dhd"><i class="ti ti-server dico" aria-hidden="true"></i><span class="badge binfo">邊緣節點</span></div><div><div class="dname">邊緣運算主機</div><div class="dmodel">Dell Edge Gateway 3000</div></div><div class="dparams"><div class="ptrow"><span class="ptk">處理器</span><span class="ptv">Intel Atom x6425E</span></div><div class="ptrow"><span class="ptk">記憶體</span><span class="ptv">8 GB DDR4</span></div><div class="ptrow"><span class="ptk">儲存</span><span class="ptv">64 GB eMMC</span></div><div class="ptrow"><span class="ptk">工作溫度</span><span class="ptv">-20–60 °C</span></div></div><div class="protos"><span class="ptag">MQTT Broker</span><span class="ptag">Node-RED</span></div></div>
+      </div>
+
+      <div class="slabel">電力與保護設備</div>
+      <div class="dgrid">
+        <div class="dcard"><div class="dhd"><i class="ti ti-battery-charging dico" aria-hidden="true"></i><span class="badge bok">正常</span></div><div><div class="dname">不斷電系統（UPS）</div><div class="dmodel">APC Smart-UPS 1500VA</div></div><div class="dparams"><div class="ptrow"><span class="ptk">容量</span><span class="ptv">1500 VA / 1000 W</span></div><div class="ptrow"><span class="ptk">備援時間</span><span class="ptv">約 15 min</span></div><div class="ptrow"><span class="ptk">輸入電壓</span><span class="ptv">220V AC</span></div><div class="ptrow"><span class="ptk">通訊</span><span class="ptv">USB / SmartSlot</span></div></div><div class="protos"><span class="ptag">SNMP</span><span class="ptag">Modbus</span></div></div>
+        <div class="dcard"><div class="dhd"><i class="ti ti-plug dico" aria-hidden="true"></i><span class="badge bok">正常</span></div><div><div class="dname">電力監測模組</div><div class="dmodel">Schneider PowerTag E</div></div><div class="dparams"><div class="ptrow"><span class="ptk">量測項目</span><span class="ptv">V, A, W, PF, Hz</span></div><div class="ptrow"><span class="ptk">精度</span><span class="ptv">Class 1</span></div><div class="ptrow"><span class="ptk">電流範圍</span><span class="ptv">最大 630A</span></div><div class="ptrow"><span class="ptk">安裝</span><span class="ptv">無線夾式</span></div></div><div class="protos"><span class="ptag">Zigbee</span><span class="ptag">Modbus TCP</span></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>© 2026 易歐特科技有限公司　|　水處理系統雲端監控</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script>
+function showPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+function updateClock(){document.getElementById('clock').textContent=new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit',second:'2-digit'})}
+updateClock();setInterval(updateClock,1000);
+const labels=[];
+for(let i=23;i>=0;i--)labels.push(new Date(Date.now()-i*3600000).getHours()+':00');
+const phData=[7.18,7.22,7.19,7.24,7.31,7.28,7.20,7.15,7.18,7.22,7.25,7.23,7.20,7.18,7.22,7.25,7.28,7.30,7.27,7.24,7.22,7.23,7.21,7.23];
+new Chart(document.getElementById('phChart').getContext('2d'),{type:'line',data:{labels,datasets:[
+  {label:'pH',data:phData,borderColor:'#1D9E75',backgroundColor:'rgba(29,158,117,0.08)',borderWidth:2,pointRadius:0,tension:0.4,fill:true},
+  {label:'上限',data:Array(24).fill(8.5),borderColor:'rgba(226,75,74,0.35)',borderDash:[4,4],borderWidth:1,pointRadius:0},
+  {label:'下限',data:Array(24).fill(6.5),borderColor:'rgba(226,75,74,0.35)',borderDash:[4,4],borderWidth:1,pointRadius:0}
+]},options:{responsive:true,plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false}},scales:{x:{grid:{display:false},ticks:{maxTicksLimit:8,color:'#888',font:{size:11}}},y:{min:6.0,max:9.0,grid:{color:'rgba(128,128,128,0.1)'},ticks:{color:'#888',font:{size:11}}}}}});
+setInterval(()=>{
+  document.getElementById('ph').textContent=(7.1+Math.random()*0.3).toFixed(2);
+  document.getElementById('temp').innerHTML=(23.5+Math.random()*1.2).toFixed(1)+'<span class="munit">°C</span>';
+},5000);
+</script>
+</body>
+</html>
