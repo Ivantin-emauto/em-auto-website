@@ -3,7 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>易歐特科技有限公司</title>
+<title>易歐特科技有限公司｜自動化設備規劃・水處理工程・環境雲端監控</title>
+<meta name="description" content="易歐特科技(E&M Auto Technology):專業自動化設備規劃設計、工業廢水處理工程、環境雲端監控系統。10年以上經驗,100+完成案例。另提供 AI PLC 程式產生平台。">
+<link rel="canonical" href="https://em-auto.com.tw/">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -25,9 +27,11 @@
   .nav-logo { display: flex; align-items: center; gap: 12px; }
   .logo-text { color: white; font-size: 13px; font-weight: 400; line-height: 1.3; }
   .logo-text strong { display: block; font-size: 11px; color: var(--silver); font-weight: 300; margin-top: 2px; }
-  .nav-links { display: flex; gap: 28px; }
+  .nav-links { display: flex; gap: 28px; align-items: center; }
   .nav-links a { color: rgba(255,255,255,0.75); font-size: 13px; letter-spacing: 0.06em; text-decoration: none; transition: color 0.2s; padding-bottom: 2px; border-bottom: 1px solid transparent; }
   .nav-links a:hover { color: white; border-color: var(--accent-light); }
+  .nav-links a.nav-cta { background: var(--accent); color: white; border-radius: 5px; padding: 6px 14px; border: none; }
+  .nav-links a.nav-cta:hover { background: var(--accent-light); }
 
   .hero { min-height: 100vh; background: linear-gradient(160deg, var(--navy) 0%, var(--navy-mid) 45%, #1e3a5e 100%); display: flex; align-items: center; padding: 100px 5% 80px; position: relative; overflow: hidden; }
   .hero::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle at 20% 50%, rgba(58,130,196,0.12) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(58,130,196,0.08) 0%, transparent 40%); pointer-events: none; }
@@ -40,8 +44,10 @@
   .hero-en { font-size: 13px; color: var(--silver); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 28px; font-weight: 300; }
   .hero-divider { width: 40px; height: 2px; background: var(--accent); margin-bottom: 28px; }
   .hero-desc { font-size: 16px; color: rgba(255,255,255,0.7); line-height: 1.8; max-width: 500px; margin-bottom: 44px; }
-  .hero-tags { display: flex; gap: 10px; flex-wrap: wrap; }
+  .hero-tags { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 32px; }
   .tag { border: 1px solid rgba(255,255,255,0.2); border-radius: 4px; padding: 6px 14px; font-size: 12px; color: rgba(255,255,255,0.65); letter-spacing: 0.05em; }
+  .hero-cta { display: inline-flex; align-items: center; gap: 8px; background: var(--accent); color: white; text-decoration: none; border-radius: 8px; padding: 13px 26px; font-size: 14px; letter-spacing: 0.03em; transition: background 0.2s, transform 0.2s; }
+  .hero-cta:hover { background: var(--accent-light); transform: translateY(-2px); }
   .hero-scroll { position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 8px; color: rgba(255,255,255,0.35); font-size: 11px; letter-spacing: 0.15em; }
   .scroll-line { width: 1px; height: 36px; background: rgba(255,255,255,0.2); animation: scrollPulse 2s ease-in-out infinite; }
   @keyframes scrollPulse { 0%, 100% { opacity: 0.2; } 50% { opacity: 0.6; } }
@@ -71,6 +77,11 @@
   .service-icon svg { width: 22px; height: 22px; stroke: var(--navy-light); fill: none; stroke-width: 1.5; }
   .service-card h3 { font-size: 16px; font-weight: 500; color: var(--navy); margin-bottom: 10px; }
   .service-card p { font-size: 13px; color: var(--text-muted); line-height: 1.75; }
+  .service-card .card-link { display: inline-flex; align-items: center; gap: 5px; margin-top: 16px; color: var(--accent); font-size: 13px; font-weight: 500; text-decoration: none; }
+  .service-card .card-link:hover { text-decoration: underline; }
+  .service-card.featured { border-color: rgba(58,130,196,0.35); background: linear-gradient(180deg, #fbfdff 0%, white 100%); }
+  .service-card.featured::before { transform: scaleX(1); }
+  .badge-new { display: inline-block; background: var(--accent); color: white; font-size: 10px; letter-spacing: 0.08em; border-radius: 3px; padding: 2px 7px; margin-left: 8px; vertical-align: middle; }
 
   .projects { background: white; }
   .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 28px; margin-top: 56px; }
@@ -116,8 +127,14 @@
   .btn-submit { background: var(--accent); border: none; border-radius: 8px; padding: 12px 28px; color: white; font-size: 14px; font-family: 'Noto Sans TC', sans-serif; cursor: pointer; transition: background 0.2s; align-self: flex-start; letter-spacing: 0.05em; }
   .btn-submit:hover { background: var(--accent-light); }
 
-  footer { background: #111d2e; padding: 28px 5%; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
-  footer p { font-size: 12px; color: rgba(255,255,255,0.3); letter-spacing: 0.04em; }
+  footer { background: #111d2e; padding: 40px 5% 28px; }
+  .footer-inner { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 28px; padding-bottom: 24px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .footer-col h4 { color: white; font-size: 13px; font-weight: 500; margin-bottom: 12px; letter-spacing: 0.05em; }
+  .footer-col p, .footer-col a { font-size: 12px; color: rgba(255,255,255,0.45); line-height: 1.9; text-decoration: none; display: block; }
+  .footer-col a:hover { color: var(--accent-light); }
+  .footer-col a.highlight { color: var(--accent-light); font-weight: 500; }
+  .footer-bottom { padding-top: 20px; text-align: center; }
+  .footer-bottom p { font-size: 12px; color: rgba(255,255,255,0.3); letter-spacing: 0.04em; }
 
   @media (max-width: 768px) {
     .nav-links { display: none; }
@@ -148,6 +165,7 @@
     <a href="#services">服務項目</a>
     <a href="#projects">工程實績</a>
     <a href="#contact">聯絡我們</a>
+    <a href="https://www.plcaicoding.com" target="_blank" rel="noopener" class="nav-cta">AI PLC 平台</a>
   </div>
 </nav>
 
@@ -165,6 +183,7 @@
       <div class="tag">環境雲端監控</div>
       <div class="tag">客製化設計</div>
     </div>
+    <a href="https://www.plcaicoding.com" target="_blank" rel="noopener" class="hero-cta">試用 AI PLC 程式產生器 →</a>
   </div>
   <div class="hero-scroll"><div class="scroll-line"></div>SCROLL</div>
 </section>
@@ -191,7 +210,7 @@
 <section class="services" id="services">
   <div class="section-label">服務項目</div>
   <h2 class="section-title">我們提供什麼</h2>
-  <p class="section-sub">四大核心專業領域，提供從規劃到執行的一站式工程服務。</p>
+  <p class="section-sub">從規劃到執行的一站式工程服務，並提供自主開發的 AI PLC 程式工具。</p>
   <div class="services-grid">
     <div class="service-card">
       <div class="service-icon"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg></div>
@@ -212,6 +231,12 @@
       <div class="service-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07M8.46 8.46a5 5 0 0 0 0 7.07"/></svg></div>
       <h3>維護與技術支援</h3>
       <p>提供設備安裝後的定期維護、故障診斷與緊急技術支援服務，確保系統長期穩定運作，延長設備使用壽命。</p>
+    </div>
+    <div class="service-card featured">
+      <div class="service-icon"><svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/><line x1="14" y1="4" x2="10" y2="20"/></svg></div>
+      <h3>AI PLC 程式產生平台<span class="badge-new">NEW</span></h3>
+      <p>易歐特自主開發的 AI 工具。以中文描述控制需求即可產生 PLC 階梯圖與 ST 程式碼，並可解讀既有程式、重構最佳化、產生 HMI 標籤與畫面。內建廢水、淨水、溫室、養殖等環控標準控制塊元件庫，支援三菱、西門子、歐姆龍、台達。</p>
+      <a href="https://www.plcaicoding.com" target="_blank" rel="noopener" class="card-link">前往 PLC AI Coding 平台 →</a>
     </div>
   </div>
 </section>
@@ -376,7 +401,11 @@
     <div class="contact-info">
       <div class="contact-item">
         <div class="contact-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
-        <div><div class="contact-item-label">電子郵件</div><div class="contact-item-value"><a href="/cdn-cgi/l/email-protection#a8c1dec9c6e8cdc585c9dddcc786cbc7c586dcdf"><span class="__cf_email__" data-cfemail="a3cad5c2cde3c6ce8ec2d6d7cc8dc0ccce8dd7d4">[email&#160;protected]</span></a></div></div>
+        <div><div class="contact-item-label">電子郵件</div><div class="contact-item-value"><a href="mailto:ivan@em-auto.com.tw">ivan@em-auto.com.tw</a></div></div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+        <div><div class="contact-item-label">聯絡電話</div><div class="contact-item-value"><a href="tel:+886906390609">0906-390-609</a></div></div>
       </div>
       <div class="contact-item">
         <div class="contact-icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
@@ -399,4 +428,37 @@
   </div>
 </section>
 
-<foot
+<footer>
+  <div class="footer-inner">
+    <div class="footer-col">
+      <h4>易歐特科技有限公司</h4>
+      <p>E&M Auto Technology Ltd., Co.<br>
+      高雄市新興區民權一路251號21樓之1<br>
+      統一編號：42815148</p>
+    </div>
+    <div class="footer-col">
+      <h4>服務項目</h4>
+      <a href="#services">自動化設備規劃與設計</a>
+      <a href="#services">水處理工程</a>
+      <a href="#services">環境雲端監控</a>
+      <a href="#services">維護與技術支援</a>
+    </div>
+    <div class="footer-col">
+      <h4>旗下平台</h4>
+      <a href="https://www.plcaicoding.com" target="_blank" rel="noopener" class="highlight">PLC AI Coding — AI PLC 程式產生平台 →</a>
+      <p style="margin-top:4px">用中文描述需求，AI 自動產生 PLC 階梯圖與 ST 程式碼</p>
+    </div>
+    <div class="footer-col">
+      <h4>聯絡我們</h4>
+      <a href="mailto:ivan@em-auto.com.tw">ivan@em-auto.com.tw</a>
+      <a href="tel:+886906390609">0906-390-609</a>
+      <p>週一至週五 09:00 – 18:00</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 易歐特科技有限公司 E&M Auto Technology Ltd., Co. All Rights Reserved.</p>
+  </div>
+</footer>
+
+</body>
+</html>
